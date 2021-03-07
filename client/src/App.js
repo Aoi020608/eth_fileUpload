@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
-import ipfs from './ipfs';
+import ipfs from "./ipfs";
 
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = {
+    storageValue: 0,
+    web3: null,
+    accounts: null,
+    contract: null,
+    buffer: null,
+    iphsHash: "",
+  };
 
   captureFile = this.captureFile.bind(this);
   onSubmit = this.onSubmit.bind(this);
@@ -24,7 +31,7 @@ class App extends Component {
       const deployedNetwork = SimpleStorageContract.networks[networkId];
       const instance = new web3.eth.Contract(
         SimpleStorageContract.abi,
-        deployedNetwork && deployedNetwork.address,
+        deployedNetwork && deployedNetwork.address
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
@@ -33,7 +40,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, accounts, or contract. Check console for details.`
       );
       console.error(error);
     }
@@ -58,14 +65,23 @@ class App extends Component {
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
-      this.setState({buffer: Buffer(reader.result)});
-      console.log('buffer', this.state.buffer);
-    }
+      this.setState({ buffer: Buffer(reader.result) });
+      console.log("buffer", this.state.buffer);
+    };
   }
 
   onSubmit(e) {
     e.preventDefault();
     console.log("on submit");
+    ipfs.files.add(this.state.buffer, (err, result) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      
+      this.setState({ iphsHash: result[0].hash });
+      console.log("ipfsHash", this.state.iphsHash);
+    });
   }
 
   render() {
@@ -75,14 +91,16 @@ class App extends Component {
     return (
       <div className="App">
         <nav>
-          <a href="#" className="">IPFS file upload Dpp</a>
+          <a href="#" className="">
+            IPFS file upload Dpp
+          </a>
         </nav>
         <h1>Your Image</h1>
         <p>This image is stored on IPFS & The Ethereum Blockchain!</p>
-        <img src="" alt="picture" />
+        <img src={`https://ipfs.io/ipfs/${this.state.iphsHash}`} alt="" />
         <h2>Upload image</h2>
         <form onSubmit={this.onSubmit}>
-          <input type="file" onChange={this.captureFile}  />
+          <input type="file" onChange={this.captureFile} />
           <input type="submit" />
         </form>
       </div>
