@@ -33,6 +33,14 @@ class App extends Component {
         SimpleStorageContract.abi,
         deployedNetwork && deployedNetwork.address
       );
+      console.log(instance);
+      instance.methods
+        .get()
+        .call({from: accounts[0]})
+        .then((iphsHash) => {
+          console.log(iphsHash);
+          this.setState({iphsHash: iphsHash})
+        });
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -71,6 +79,7 @@ class App extends Component {
   }
 
   onSubmit(e) {
+    const { accounts, contract } = this.state;
     e.preventDefault();
     console.log("on submit");
     ipfs.files.add(this.state.buffer, (err, result) => {
@@ -78,9 +87,13 @@ class App extends Component {
         console.error(err);
         return;
       }
-      
-      this.setState({ iphsHash: result[0].hash });
-      console.log("ipfsHash", this.state.iphsHash);
+
+      contract.methods
+        .set(result[0].hash)
+        .send({ from: accounts[0] })
+        .then((r) => {
+          console.log(r);
+        });
     });
   }
 
