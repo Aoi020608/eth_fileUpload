@@ -2,13 +2,16 @@
 pragma solidity >=0.4.21 <0.7.0;
 
 contract SimpleStorage {
-  uint storedData;
+  uint ipfsHash;
 
   function set(uint x) public {
-    storedData = x;
+    ipfsHash = x;
   }
 
   function get() public view returns (uint) {
-    return storedData;
+    return ipfsHash;
   }
 }
+
+
+//0xD141a40D75A0a2412f0998D7e10dd5b31B1fC472
