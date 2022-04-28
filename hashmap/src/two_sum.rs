@@ -11,13 +11,6 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
 
     for i in 0..nums.len() {
         diff = target - nums[i];
-        // match map.insert(, i as i32) {
-        //     None => continue,
-        //     Some(index) => {
-        //         ans.push(index as i32);
-        //         ans.push(diff)
-        //     }
-        // }
         if map.contains_key(&diff) {
             let index = map[&diff];
             ans.push(index);
