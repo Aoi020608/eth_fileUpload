@@ -4,6 +4,8 @@
 //Return the linked list sorted as well.
 use std::collections::HashSet;
 
+mod sorted_list_2;
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
     pub val: i32,
@@ -36,19 +38,39 @@ pub fn delete_duplicates(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode
     head
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test_delete_duplicates() {
-        let mut head = Some(Box::new(ListNode {
-            val: 1,
-            next: Some(Box::new(ListNode {
-                val: 1,
-                next: Some(Box::new(ListNode { val: 2, next: None })),
-            })),
-        }));
-        let sorted = delete_duplicates(head);
-        println!("{:?}", sorted);
+pub fn delete_duplicates_1(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    let mut curr_node = head.as_mut();
+
+    while let Some(curr) = curr_node {
+        let mut next_node = curr.next.take();
+
+        while let Some(next) = next_node.as_mut() {
+            if next.val == curr.val {
+                next_node = next.next.take();
+            } else {
+                curr.next = next_node;
+                break;
+            }
+        }
+        curr_node = curr.next.as_mut();
     }
+
+    head
 }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     #[test]
+//     fn test_delete_duplicates() {
+//         let mut head = Some(Box::new(ListNode {
+//             val: 1,
+//             next: Some(Box::new(ListNode {
+//                 val: 1,
+//                 next: Some(Box::new(ListNode { val: 2, next: None })),
+//             })),
+//         }));
+//         let sorted = delete_duplicates_1(head);
+//         println!("{:?}", sorted);
+//     }
+// }
