@@ -109,13 +109,13 @@ pub fn delete_duplicates_3(mut head: Option<Box<ListNode>>) -> Option<Box<ListNo
     let mut remove = cur.next.as_mut().unwrap().val - 1;
 
     while cur.next.is_some() {
-        let val = cur.next.as_mut().unwrap().val;
-        let mut next_val = val - 1;
+        let curr_val = cur.next.as_mut().unwrap().val;
+        let mut next_val = curr_val - 1;
         if let Some(n) = &cur.next.as_mut().unwrap().next {
             next_val = n.val;
         }
-        if val == next_val || val == remove {
-            remove = val;
+        if curr_val == next_val || curr_val == remove {
+            remove = curr_val;
             let next = cur.next.as_mut().unwrap().clone();
             cur.next = next.next;
             continue;
@@ -124,6 +124,33 @@ pub fn delete_duplicates_3(mut head: Option<Box<ListNode>>) -> Option<Box<ListNo
     }
 
     return return_list.next;
+}
+
+pub fn delete_duplicates_4(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+    if head.is_none() {
+        return head;
+    }
+
+    let mut return_list = ListNode::new(-1);
+    return_list.next = head;
+    let mut cur = &mut return_list;
+    let remove = cur.next.as_mut().unwrap().val - 1;
+
+    while cur.next.is_some() {
+        let val = cur.next.as_mut().unwrap().val;
+        let mut next_val;
+        if let Some(n) = &cur.next.as_mut().unwrap().next {
+            next_val = n.val;
+        }
+        // if val == next_val || val == remove {
+
+        // }
+    }
+
+
+    return return_list.next
+
+
 }
 
 #[cfg(test)]
