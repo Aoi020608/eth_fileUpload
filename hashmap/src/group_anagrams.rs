@@ -48,6 +48,21 @@ pub fn group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
     map.into_iter().map(|(_, v)| v).collect()
 }
 
+pub fn group_anagrams_3(strs: Vec<String>) -> Vec<Vec<String>> {
+    let mut map = HashMap::new();
+
+    for s in strs.into_iter() {
+        let mut key = [0; 26];
+        for ch in s.chars() {
+            key[(ch as usize - 'a' as usize) as usize] += 1;
+        }
+        let arr = map.entry(key).or_insert(Vec::new());
+        arr.push(s);
+    }
+
+    map.into_iter().map(|(_, v)| v).collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -66,13 +81,15 @@ mod tests {
         println!("{:?}", ans);
     }
 
-    // #[test]
-    // fn test_group_anagrams_2() {
-    //     let nums1 = vec![4, 9, 5];
-    //     let nums2 = vec![9, 4, 9, 8, 4];
-    //     let ans = group_anagrams(nums1, nums2);
-    //     println!("{:?}", ans);
-    // }
+    #[test]
+    fn test_group_anagrams_2() {
+        let _str: Vec<String> = vec!["a".to_string()];
+        // println!("{:?}", _str);
+        let ans = group_anagrams_2(_str);
+        assert_eq!(ans, vec![["a".to_string()]]);
+    }
+    // Key: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    // Map: {[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]: ["a"]}
 }
 
 // How do we know
