@@ -70,30 +70,37 @@ pub fn is_valid_2(s: String) -> bool {
             _ => stack.push(c),
         }
     }
-
+    println!("{:?}", stack);
     stack.is_empty()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn test_is_valid_1() {
-        let input = String::from("()");
-        let is_ok = is_valid(input);
-        assert_eq!(is_ok, true);
-    }
+    // #[test]
+    // fn test_is_valid_1() {
+    //     let input = String::from("()");
+    //     let is_ok = is_valid(input);
+    //     assert_eq!(is_ok, true);
+    // }
+
+    // #[test]
+    // fn test_is_valid_2() {
+    //     let input = String::from("()[]{}");
+    //     let is_ok = is_valid_2(input);
+    //     assert_eq!(is_ok, true);
+    // }
+
+    // #[test]
+    // fn test_is_valid_3() {
+    //     let input = String::from("(]");
+    //     let is_ok = is_valid_2(input);
+    //     assert_eq!(is_ok, false);
+    // }
 
     #[test]
-    fn test_is_valid_2() {
-        let input = String::from("()[]{}");
-        let is_ok = is_valid_2(input);
-        assert_eq!(is_ok, true);
-    }
-
-    #[test]
-    fn test_is_valid_3() {
-        let input = String::from("(]");
+    fn test_is_valid_4() {
+        let input = String::from("(((((((");
         let is_ok = is_valid_2(input);
         assert_eq!(is_ok, false);
     }
