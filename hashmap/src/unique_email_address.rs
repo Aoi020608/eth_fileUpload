@@ -46,7 +46,7 @@ mod tests {
         let ans = num_unique_emails(emails);
         assert_eq!(ans, 2);
     }
-    
+
     #[test]
     fn test_num_unique_emails_1() {
         let emails = vec![
