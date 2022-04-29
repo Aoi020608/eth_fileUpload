@@ -33,16 +33,20 @@ impl TreeNode {
 }
 use std::cell::RefCell;
 use std::rc::Rc;
-impl Solution {
-    pub fn merge_trees(
-        root1: Option<Rc<RefCell<TreeNode>>>,
-        root2: Option<Rc<RefCell<TreeNode>>>,
-    ) -> Option<Rc<RefCell<TreeNode>>> {
 
-        
-
-
-
-
+pub fn merge_trees(
+    root1: Option<Rc<RefCell<TreeNode>>>,
+    root2: Option<Rc<RefCell<TreeNode>>>,
+) -> Option<Rc<RefCell<TreeNode>>> {
+    match (root1, root2) {
+        (Some(n1), Some(n2)) => {
+            let (n1, n2) = (n1.borrow(), n2.borrow());
+            let mut root = TreeNode::new(n1.val + n2.val);
+            root.left = merge_trees(n1.left.clone(), n2.left.clone());
+            root.right = merge_trees(n1.right.clone(), n2.right.clone());
+            return Some(Rc::new(RefCell::new(root)));
+        }
+        (None, Some(n)) | (Some(n), None) => return Some(n),
+        (None, None) => return None,
     }
 }
