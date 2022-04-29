@@ -1,7 +1,7 @@
 # HashMap
 
 ## Subarray sum equals K | Number of subarrays with sum equals K
-![image](hashmap/image1.png)
+![image](https://github.com/Aoi1011/leet-code/blob/main/hashmap/image1.png)
 
 
 ## Resources
