@@ -24,10 +24,10 @@ impl TreeNode {
     }
 }
 use std::cell::RefCell;
+use std::cmp;
 use std::rc::Rc;
 
 // BFS
-
 pub fn min_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     if root.is_none() {
         return 0;
@@ -74,5 +74,30 @@ pub fn min_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 }
 
 // DFS
+pub fn min_depth_1(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    let mut res: i32 = i32::max_value();
 
-//
+    let mut depth = 1;
+
+    match root {
+        Some(node) => {
+            get_min_depth(node, &mut depth, &mut res);
+            res
+        }
+        None => 0,
+    }
+}
+
+fn get_min_depth(node: Rc<RefCell<TreeNode>>, depth: &mut i32, result: &mut i32) {
+    if node.borrow().left.is_none() && node.borrow().right.is_none() {
+        *result = cmp::min(*result, *depth);
+    }
+
+    if let Some(left) = node.borrow().left.clone() {
+        get_min_depth(left, depth, result);
+    }
+
+    if let Some(right) = node.borrow().right.clone() {
+        get_min_depth(right, depth, result);
+    }
+}
