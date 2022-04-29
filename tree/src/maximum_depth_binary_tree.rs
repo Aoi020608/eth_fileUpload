@@ -92,6 +92,41 @@ pub fn max_depth_2(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     depth
 }
 
+pub fn max_depth_3(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    if root.is_none() {
+        return 0;
+    }
+
+    let mut depth = 1;
+    let mut q: Vec<_> = vec![root.clone()];
+
+    while q.len() > 0 {
+        let mut new_q: Vec<Option<Rc<RefCell<TreeNode>>>> = vec![];
+
+        for opt in q.iter() {
+            if let Some(node) = opt {
+                let bor_node = node.borrow();
+
+                if bor_node.left.is_some() {
+                    new_q.push(bor_node.left.clone());
+                }
+
+                if bor_node.right.is_some() {
+                    new_q.push(bor_node.right.clone());
+                }
+            }
+        }
+
+        if new_q.len() > 0 {
+            depth += 1;
+        } 
+
+        q = new_q;
+    }
+
+    depth
+}
+
 // Input: root = [3,9,20,null,null,15,7]
 // Output: 3
 
