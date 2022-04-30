@@ -28,14 +28,27 @@ impl TreeNode {
     }
 }
 use std::cell::RefCell;
-use std::rc::Rc;
 use std::collections::VecDeque;
+use std::rc::Rc;
 
 pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-
     let mut is_valid = true;
-    
-    
 
-    is_valid
+    if root.is_none() {
+        return true;
+    }
+
+    valid(root, std::i64::MIN, std::i64::MAX)
+}
+
+fn valid(node: Option<Rc<RefCell<TreeNode>>>, min: i64, max: i64) -> bool {
+    if let Some(node) = node {
+        if node.borrow().val as i64 <= min || node.borrow().val as i64 >= max {
+            return false;
+        }
+
+        return valid(node.borrow().left.clone(), min, node.borrow().val as i64)
+            && valid(node.borrow().right.clone(), node.borrow().val as i64, max);
+    }
+    true
 }
