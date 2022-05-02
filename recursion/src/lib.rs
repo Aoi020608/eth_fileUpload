@@ -1,4 +1,5 @@
-mod pow;
+// mod pow;
+mod k_th_symbol_in_grammer;
 
 #[cfg(test)]
 mod tests {
