@@ -1,5 +1,6 @@
 // mod search_insert_position;
-mod find_minimum_in_rotated_sorted_array;
+// mod find_minimum_in_rotated_sorted_array;
+mod search_in_rotated_sorted_array;
 
 
 #[cfg(test)]
