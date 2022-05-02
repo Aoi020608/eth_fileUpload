@@ -10,6 +10,8 @@ Output: 2
 
 */
 
+use std::cmp::Ordering;
+
 struct Solution;
 
 impl Solution {
@@ -18,6 +20,25 @@ impl Solution {
             Err(e) => return e as i32,
             Ok(index) => return index as i32,
         }
+    }
+
+    pub fn search_insert_01(nums: Vec<i32>, target: i32) -> i32 {
+        let mut lo: i32 = 0;
+        let mut hi: i32 = nums.len() as i32 - 1;
+
+        while lo <= hi {
+            let mid: i32 = lo + (hi - lo) / 2;
+
+            match target.cmp(&nums[mid as usize]) {
+                Ordering::Equal => {
+                    return mid;
+                }
+                Ordering::Less => hi = mid - 1,
+                Ordering::Greater => lo = mid + 1,
+            }
+        }
+
+        lo
     }
 }
 
@@ -28,7 +49,7 @@ mod tests {
     fn test_search_insert() {
         let nums = vec![1, 2, 5, 6];
         let target = 5;
-        let result = Solution::search_insert(nums, target);
+        let result = Solution::search_insert_01(nums, target);
         assert_eq!(result, 2);
     }
 
@@ -36,7 +57,7 @@ mod tests {
     fn test_search_insert_01() {
         let nums = vec![1, 3, 5, 6];
         let target = 2;
-        let result = Solution::search_insert(nums, target);
+        let result = Solution::search_insert_01(nums, target);
         assert_eq!(result, 1);
     }
 
@@ -44,7 +65,7 @@ mod tests {
     fn test_search_insert_02() {
         let nums = vec![1, 3, 5, 6];
         let target = 7;
-        let result = Solution::search_insert(nums, target);
+        let result = Solution::search_insert_01(nums, target);
         assert_eq!(result, 4);
     }
 }
