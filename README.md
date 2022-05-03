@@ -105,7 +105,18 @@
           <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Meeting Rooms II</a>
         </td>
         <td>
-            <a href="https://github.com/Aoi1011/leet-code/issues/50"> #49</a>
+            <a href="https://github.com/Aoi1011/leet-code/issues/50"> #50</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+          392
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Is Subsequence</a>
+        </td>
+        <td>
+            <a href="https://github.com/Aoi1011/leet-code/issues/51"> #51</a>
         </td>
     </tr>
   
