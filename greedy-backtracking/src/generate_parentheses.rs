@@ -39,6 +39,7 @@ impl Solution {
         res
     }
 
+    #[allow(dead_code)]
     pub fn generate_parenthesis_01(n: i32) -> Vec<String> {
         // only add open paranthesis if open < n
         // only add a closing paranthesis if closed < open
