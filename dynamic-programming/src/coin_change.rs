@@ -17,6 +17,7 @@ Explanation: 11 = 5 + 5 + 1
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
         // if coins.len() <= 1 {
         //     if amount > coins[0] {
@@ -49,6 +50,7 @@ impl Solution {
         ret
     }
 
+    #[allow(dead_code)]
     pub fn coin_change_1(coins: Vec<i32>, amount: i32) -> i32 {
         let amount = amount as usize;
         let mut dp = vec![None; amount + 1];
@@ -71,6 +73,7 @@ impl Solution {
         dp[amount].unwrap_or(-1)
     }
 
+    #[allow(dead_code)]
     pub fn coin_change_02(coins: Vec<i32>, amount: i32) -> i32 {
         // Go from bottom to top
         let mut dp = vec![amount + 1; (amount + 1) as usize];
@@ -91,6 +94,7 @@ impl Solution {
         }
     }
 
+    #[allow(dead_code)]
     pub fn coin_change_03(coins: Vec<i32>, amount: i32) -> i32 {
         let mut dp = vec![amount + 1; (amount + 1) as usize];
         dp[0] = 0;

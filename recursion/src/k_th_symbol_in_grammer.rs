@@ -13,12 +13,15 @@ Explanation: row 1: 0
 */
 
 struct Solution;
+
 impl Solution {
-    pub fn kth_grammar(n: i32, k: i32) -> i32 {
+    #[allow(dead_code)]
+    pub fn kth_grammar(k: i32) -> i32 {
         //https://doc.rust-lang.org/std/primitive.i32.html#method.count_ones
         (k - 1).count_ones() as i32 % 2
     }
 
+    #[allow(dead_code)]
     pub fn kth_grammer_1(n: i32, k: i32) -> i32 {
         if n == 1 {
             return 0;

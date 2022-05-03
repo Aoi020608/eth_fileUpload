@@ -17,6 +17,7 @@ pub struct TreeNode {
 
 impl TreeNode {
     #[inline]
+    #[allow(dead_code)]
     pub fn new(val: i32) -> Self {
         TreeNode {
             val,
@@ -29,6 +30,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 // Depth First Search
+#[allow(dead_code)]
 pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
     helper(&preorder, &inorder);
 

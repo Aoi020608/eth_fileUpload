@@ -19,6 +19,7 @@ pub struct TreeNode {
 
 impl TreeNode {
     #[inline]
+    #[allow(dead_code)]
     pub fn new(val: i32) -> Self {
         TreeNode {
             val,
@@ -28,11 +29,10 @@ impl TreeNode {
     }
 }
 use std::cell::RefCell;
-use std::collections::VecDeque;
 use std::rc::Rc;
 
+#[allow(dead_code)]
 pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-    let mut is_valid = true;
 
     if root.is_none() {
         return true;
