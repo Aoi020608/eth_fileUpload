@@ -41,6 +41,7 @@
 </details>
 
 ## LinkedList
+
 <table id="leetcode" class="table-auto">
   <thead>
     <tr>
@@ -64,6 +65,7 @@
 </table>
 
 ## Others
+
 <table id="leetcode" class="table-auto">
   <thead>
     <tr>
@@ -86,10 +88,10 @@
     </tr>
      <tr>
         <td>
-          2
+          252
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Meeting Rooms/a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Meeting Rooms</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/49"> #49</a>
@@ -97,13 +99,13 @@
     </tr>
     <tr>
         <td>
-          3
+          253
         </td>
         <td>
           <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Meeting Rooms II</a>
         </td>
         <td>
-            <a href="https://github.com/Aoi1011/leet-code/issues/49"> #49</a>
+            <a href="https://github.com/Aoi1011/leet-code/issues/50"> #49</a>
         </td>
     </tr>
   
