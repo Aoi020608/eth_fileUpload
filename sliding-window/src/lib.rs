@@ -1,5 +1,6 @@
 // mod longest_substring_without_repeating_characters;
-mod minimum_size_subarray_sum;
+// mod minimum_size_subarray_sum;
+mod permutation;
 
 #[cfg(test)]
 mod tests {
