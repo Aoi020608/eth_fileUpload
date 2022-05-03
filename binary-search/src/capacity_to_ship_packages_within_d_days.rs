@@ -25,12 +25,13 @@ splitting the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) i
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn ship_within_days(weights: Vec<i32>, days: i32) -> i32 {
         let mut left = weights.iter().max().unwrap().clone();
         let mut right: i32 = weights.iter().sum();
 
         while left < right {
-            let mut mid = (left + right) / 2;
+            let mid = (left + right) / 2;
 
             if Self::can_ship(&mid, &weights, days) {
                 right = mid;
