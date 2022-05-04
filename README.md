@@ -53,6 +53,32 @@
   <tbody>
     <tr>
         <td>
+          82
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/linkedlist/src/remove_duplicates_from_sorted_list.rs"> 
+            Remove Duplicates from Sorted List
+          </a>
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/issues/55"> #55</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+          82
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/linkedlist/src/remove_duplicates_from_sorted_list_II.rs"> 
+            Remove Duplicates from Sorted List II
+          </a>
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/issues/56"> #56</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
           1
         </td>
         <td>
