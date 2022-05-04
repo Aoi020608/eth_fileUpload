@@ -2,14 +2,7 @@
 // mod meeting_rooms;
 // mod is_subsequence;
 // mod next_permutation;
-mod string_to_integer;
+// mod string_to_integer;
+mod zigzag_conversion;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
-    }
-}
+

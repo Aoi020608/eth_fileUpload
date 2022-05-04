@@ -141,6 +141,17 @@
             <a href="https://github.com/Aoi1011/leet-code/issues/53"> #53</a>
         </td>
     </tr>
+    <tr>
+        <td>
+          6
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Zigzag Conversion</a>
+        </td>
+        <td>
+            <a href="https://github.com/Aoi1011/leet-code/issues/54"> #54</a>
+        </td>
+    </tr>
   
   </tbody>
 </table>
