@@ -1,6 +1,7 @@
 // mod move_zero;
 // mod meeting_rooms;
-mod is_subsequence;
+// mod is_subsequence;
+mod next_permutation;
 
 
 #[cfg(test)]

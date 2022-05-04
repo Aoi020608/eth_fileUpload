@@ -19,6 +19,8 @@ impl Solution {
 
         Self::_permute(nums, &mut res, &mut p);
 
+        println!("Permutaion: {:?}", res);
+
         res
     }
 
@@ -69,7 +71,7 @@ mod tests {
     #[test]
     fn test_permute() {
         let nums = vec![1, 2, 3];
-        let result = Solution::permute_1(nums);
+        let result = Solution::permute(nums);
         assert_eq!(
             result,
             vec![
