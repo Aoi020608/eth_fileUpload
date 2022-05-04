@@ -124,7 +124,7 @@
           31
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Next Permutation</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/next_permutation.rs"> Next Permutation</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/52"> #52</a>
@@ -135,7 +135,7 @@
           31
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Next Permutation</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/string_to_integer.rs"> String to Integer (atoi)</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/53"> #53</a>
@@ -146,7 +146,7 @@
           6
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Zigzag Conversion</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/zigzag_conversion.rs"> Zigzag Conversion</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/54"> #54</a>
