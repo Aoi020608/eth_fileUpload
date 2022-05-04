@@ -6,6 +6,7 @@ pub struct ListNode {
 }
 
 impl ListNode {
+    #[allow(dead_code)]
     #[inline]
     fn new(val: i32) -> Self {
         ListNode { next: None, val }
@@ -58,6 +59,7 @@ impl Solution {
         head
     }
 
+    #[allow(dead_code)]
     pub fn delete_duplicates_02(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut root_opt = head.as_mut();
 
@@ -85,7 +87,7 @@ mod tests {
     use super::*;
     #[test]
     fn test_delete_duplicates() {
-        let mut head = Some(Box::new(ListNode {
+        let head = Some(Box::new(ListNode {
             val: 1,
             next: Some(Box::new(ListNode {
                 val: 2,
