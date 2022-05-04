@@ -61,7 +61,7 @@
           </a>
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/issues/55"> #55</a>
+          <a href="https://github.com/Aoi1011/leet-code/issues/55"> #83</a>
         </td>
     </tr>
     <tr>

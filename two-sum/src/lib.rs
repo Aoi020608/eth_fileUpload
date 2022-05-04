@@ -173,6 +173,5 @@ mod tests {
         }));
         let added_array = add_two_numbers_2(arr1, arr2);
         println!("{:?}", added_array);
-        // assert_eq!(result, 4);
     }
 }
