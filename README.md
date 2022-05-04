@@ -127,7 +127,18 @@
           <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Next Permutation</a>
         </td>
         <td>
-            <a href="https://github.com/Aoi1011/leet-code/issues/51"> #52</a>
+            <a href="https://github.com/Aoi1011/leet-code/issues/52"> #52</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+          31
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Next Permutation</a>
+        </td>
+        <td>
+            <a href="https://github.com/Aoi1011/leet-code/issues/53"> #53</a>
         </td>
     </tr>
   
