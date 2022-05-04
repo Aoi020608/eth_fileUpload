@@ -60,9 +60,9 @@ impl Solution {
         let mut iter = t.chars();
 
         for c in s.chars() {
-            match iter.find(|&p| p == c ) {
+            match iter.find(|&p| p == c) {
                 Some(_) => (),
-                None => return false
+                None => return false,
             }
         }
 
@@ -72,7 +72,6 @@ impl Solution {
     pub fn is_subsequence_2(s: String, t: String) -> bool {
         let mut s_vec = s.chars().collect::<Vec<char>>();
         let mut t_vec = t.chars().collect::<Vec<char>>();
-        
         for t_value in t_vec {
             if let Some(&first) = s_vec.first() {
                 if first == t_value {
