@@ -1,66 +1,82 @@
-//Given an array of strings strs, group the anagrams together. You can return the answer in any order.
-// An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase,
-// typically using all the original letters exactly once.
+// #8
 
 use std::collections::HashMap;
 
-pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
-    let mut res: Vec<Vec<String>> = vec![];
-    let mut m: HashMap<[u8; 26], usize> = HashMap::new();
-    let mut i = 0;
+struct Solution;
 
-    for _str in strs.iter() {
-        let mut s: [u8; 26] = [0; 26];
-        for c in _str.chars() {
-            let ci = c as usize - 'a' as usize;
-            s[ci] += 1;
-        }
-        match m.get(&s) {
-            Some(j) => {
-                res[*j].push(_str.to_string());
+impl Solution {
+    #[allow(dead_code)]
+    pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+        let mut res: Vec<Vec<String>> = vec![];
+        let mut m: HashMap<[u8; 26], usize> = HashMap::new();
+        let mut i = 0;
+        for _str in strs.iter() {
+            let mut s: [u8; 26] = [0; 26];
+            for c in _str.chars() {
+                let ci = c as usize - 'a' as usize;
+                s[ci] += 1;
             }
-            None => {
-                m.insert(s, i);
-                if res.len() < i + 1 {
-                    res.push(vec![]);
+            match m.get(&s) {
+                Some(j) => {
+                    res[*j].push(_str.to_string());
                 }
-                res[i].push(_str.to_string());
-                i += 1;
+                None => {
+                    m.insert(s, i);
+                    if res.len() < i + 1 {
+                        res.push(vec![]);
+                    }
+                    res[i].push(_str.to_string());
+                    i += 1;
+                }
             }
         }
+        res
     }
-
-    res
-}
-
-pub fn group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
-    let mut map = HashMap::new();
-    for s in strs.into_iter() {
-        let mut key = [0; 26];
-        for ch in s.chars() {
-            key[(ch as u32 - 'a' as u32) as usize] += 1;
+    #[allow(dead_code)]
+    pub fn group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
+        let mut map = HashMap::new();
+        for s in strs.into_iter() {
+            let mut key = [0; 26];
+            for ch in s.chars() {
+                key[(ch as u32 - 'a' as u32) as usize] += 1;
+            }
+            println!("Key: {:?}", key);
+            let arr = map.entry(key).or_insert(Vec::new());
+            arr.push(s);
         }
-        println!("Key: {:?}", key);
-        let arr = map.entry(key).or_insert(Vec::new());
-        arr.push(s);
+        println!("Map: {:?}", map);
+        map.into_iter().map(|(_, v)| v).collect()
     }
-    println!("Map: {:?}", map);
-    map.into_iter().map(|(_, v)| v).collect()
-}
-
-pub fn group_anagrams_3(strs: Vec<String>) -> Vec<Vec<String>> {
-    let mut map = HashMap::new();
-
-    for s in strs.into_iter() {
-        let mut key = [0; 26];
-        for ch in s.chars() {
-            key[(ch as usize - 'a' as usize) as usize] += 1;
+    #[allow(dead_code)]
+    pub fn group_anagrams_3(strs: Vec<String>) -> Vec<Vec<String>> {
+        let mut map = HashMap::new();
+        for s in strs.into_iter() {
+            let mut key = [0; 26];
+            for ch in s.chars() {
+                key[(ch as usize - 'a' as usize) as usize] += 1;
+            }
+            let arr = map.entry(key).or_insert(Vec::new());
+            arr.push(s);
         }
-        let arr = map.entry(key).or_insert(Vec::new());
-        arr.push(s);
+        map.into_iter().map(|(_, v)| v).collect()
     }
+    #[allow(dead_code)]
+    pub fn group_anagrams_4(strs: Vec<String>) -> Vec<Vec<String>> {
+        let mut map = HashMap::new();
 
-    map.into_iter().map(|(_, v)| v).collect()
+        for s in strs.into_iter() {
+            let mut key = [0; 26];
+            for ch in s.chars() {
+                key[(ch as usize - 'a' as usize) as usize] += 1
+            }
+            let arr = map.entry(key).or_insert(vec![]);
+            arr.push(s);
+        }
+
+        map.into_iter()
+            .map(|(_, v)| v)
+            .collect::<Vec<Vec<String>>>()
+    }
 }
 
 #[cfg(test)]
@@ -77,7 +93,7 @@ mod tests {
             "bat".to_string(),
         ];
         // let nums2 = vec![];
-        let ans = group_anagrams_2(_str);
+        let ans = Solution::group_anagrams_4(_str);
         println!("{:?}", ans);
     }
 
@@ -85,11 +101,9 @@ mod tests {
     fn test_group_anagrams_2() {
         let _str: Vec<String> = vec!["a".to_string()];
         // println!("{:?}", _str);
-        let ans = group_anagrams_2(_str);
+        let ans = Solution::group_anagrams_4(_str);
         assert_eq!(ans, vec![["a".to_string()]]);
     }
     // Key: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     // Map: {[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]: ["a"]}
 }
-
-// How do we know
