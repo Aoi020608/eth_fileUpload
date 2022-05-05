@@ -7,9 +7,9 @@ struct Solution;
 impl Solution {
     #[allow(dead_code)]
     pub fn intersection(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
+        let mut ans: Vec<i32> = Vec::new();
         let mut map = HashMap::new();
         let mut map2 = HashMap::new();
-        let mut ans: Vec<i32> = Vec::new();
         for i in 0..nums1.len() {
             if !map.contains_key(&nums1[i]) {
                 map.insert(nums1[i], true);
@@ -25,7 +25,7 @@ impl Solution {
             }
         }
         ans = map2.into_keys().collect();
-        ans
+        return ans;
     }
 
     #[allow(dead_code)]
