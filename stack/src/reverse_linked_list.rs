@@ -1,7 +1,4 @@
-// Given the head of a singly linked list, reverse the list, and return the reversed list.
-// Definition for singly-linked list.
-// Input: head = [1,2,3,4,5]
-// Output: [5,4,3,2,1]
+// #2
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
@@ -11,93 +8,85 @@ pub struct ListNode {
 
 impl ListNode {
     #[inline]
+    #[allow(dead_code)]
     fn new(val: i32) -> Self {
         ListNode { next: None, val }
     }
 }
 
-pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-    let mut stack = Vec::new();
-    let mut curr = head;
-    let mut return_list = ListNode::new(0);
+struct Solution;
 
-    while let Some(curr_node) = curr {
-        // println!("Current_node: {:?}", curr_node);         ListNode { val: 1, next: Some(ListNode { val: 2, next: None }) }
-        stack.push(ListNode::new(curr_node.val));
-        curr = curr_node.next.clone();
+impl Solution {
+    #[allow(dead_code)]
+    pub fn reverse_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut stack = Vec::new();
+        let mut curr = head.as_mut();
+        while let Some(curr_node) = curr {
+            stack.push(curr_node.val);
+            curr = curr_node.next.as_mut();
+        }
+
+        let mut new_head = Box::new(ListNode::new(-1));
+        let mut pre = new_head.as_mut();
+
+        while let Some(new_val) = stack.pop() {
+            let new_node = Some(Box::new(ListNode::new(new_val)));
+            pre.next = new_node;
+            pre = pre.next.as_mut().unwrap();
+        }
+
+        new_head.next
     }
 
-    // println!("After while, {:?}", stack);
+    #[allow(dead_code)]
+    pub fn reverse_list_01(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut stack = Vec::new();
+        let mut curr = head;
+        while let Some(curr_node) = curr {
+            stack.push(curr_node.val);
+            curr = curr_node.next.clone();
+        }
 
-    // while return_list.next.is_some() {
-    //     match stack.pop() {
-    //         None => break,
-    //         Some(new_node) => {
-    //             return_list.next = Some(Box::new(new_node.clone()));
-    //             return_list = new_node;
-    //         }
-    //     }
-    // }
+        let mut return_list = Box::new(ListNode::new(-1));
+        let mut pre = return_list.as_mut();
 
-    // while !stack.is_empty() {
-    //     println!("Return List: {:?} ", return_list);
-    //     match stack.pop() {
-    //         None => {}
-    //         Some(node) => {
-    //             return_list.next = ;
-    //         }
-    //     }
-    // }
-
-    return_list.next
-}
-
-pub fn reverse_list_1(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-    let mut return_list: Option<Box<ListNode>> = None;
-    let mut stack = Vec::new();
-    let mut curr = head;
-
-    while let Some(curr_node) = curr {
-        // println!("Current_node: {:?}", curr_node);         ListNode { val: 1, next: Some(ListNode { val: 2, next: None }) }
-        stack.push(Some(Box::new(ListNode::new(curr_node.val))));
-        curr = curr_node.next.clone();
+        while let Some(new_val) = stack.pop() {
+            let new_node = Box::new(ListNode::new(new_val));
+            pre.next = Some(new_node);
+            pre = pre.next.as_mut().unwrap();
+        }
+        return_list.next
     }
 
-    let mut count: u8 = 0;
-    return_list = stack[0].clone();
-
-    return_list
-}
-
-pub fn reserse_list_2(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-    let (mut prev, mut curr) = (None, head);
-    while let Some(mut node) = curr {
-        curr = node.next;
-
-        node.next = prev;
-
-        prev = Some(node);
+    #[allow(dead_code)]
+    pub fn reserse_list_02(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let (mut prev, mut curr) = (None, head);
+        while let Some(mut node) = curr {
+            curr = node.next;
+            node.next = prev;
+            prev = Some(node);
+        }
+        prev
     }
-    prev
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
-    fn test_reverse_list() {
-        let mut head = Some(Box::new(ListNode {
+    fn test_reverse_list_01() {
+        let head = Some(Box::new(ListNode {
             val: 1,
             next: Some(Box::new(ListNode { val: 2, next: None })),
         }));
 
-        let list = reserse_list_2(head);
+        let list = Solution::reverse_list_01(head);
         println!("{:?}", list);
     }
 
     #[test]
-    fn test_reverse_list_1() {
-        let mut head = Some(Box::new(ListNode {
+    fn test_reverse_list_02() {
+        let head = Some(Box::new(ListNode {
             val: 1,
             next: Some(Box::new(ListNode {
                 val: 2,
@@ -111,7 +100,7 @@ mod tests {
             })),
         }));
 
-        let list = reserse_list_2(head);
+        let list = Solution::reverse_list_01(head);
         println!("{:?}", list);
     }
 }
