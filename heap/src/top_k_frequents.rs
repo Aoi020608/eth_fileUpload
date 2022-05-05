@@ -1,8 +1,4 @@
-//Given an integer array nums and an integer k,
-//return the k most frequent elements. You may return the answer in any order.
-
-///Input: nums = [1,1,1,2,2,3], k = 2
-// Output: [1,2]
+// #4
 use std::collections::*;
 
 struct Solution;
@@ -10,8 +6,20 @@ struct Solution;
 impl Solution {
     #[allow(dead_code)]
     pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
-        let frequent_elements: Vec<i32> = Vec::new();
-        frequent_elements
+        let mut ret: Vec<i32> = Vec::with_capacity(k as usize);
+        let mut map: HashMap<i32, i32> = HashMap::new();
+        for num in nums.iter() {
+            *map.entry(*num).or_insert(0) += 1;
+        }
+        let mut heap = BinaryHeap::new();
+        for (num, o) in map.iter() {
+            heap.push((o, num));
+        }
+        for _ in 0..k {
+            let (_, num) = heap.pop().unwrap();
+            ret.push(*num);
+        }
+        ret
     }
 
     #[allow(dead_code)]
@@ -49,24 +57,6 @@ impl Solution {
         }
         res
     }
-
-    #[allow(dead_code)]
-    pub fn top_k_frequent_03(nums: Vec<i32>, k: i32) -> Vec<i32> {
-        let mut ret: Vec<i32> = Vec::with_capacity(k as usize);
-        let mut map: HashMap<i32, i32> = HashMap::new();
-        for num in nums.iter() {
-            *map.entry(*num).or_insert(0) += 1;
-        }
-        let mut heap = BinaryHeap::new();
-        for (num, o) in map.iter() {
-            heap.push((o, num));
-        }
-        for _ in 0..k {
-            let (_, num) = heap.pop().unwrap();
-            ret.push(*num);
-        }
-        ret
-    }
 }
 
 #[cfg(test)]
@@ -77,7 +67,7 @@ mod tests {
         let nums = vec![1, 1, 1, 2, 2, 3];
         let k = 1;
 
-        let ans = Solution::top_k_frequent_03(nums, k);
+        let ans = Solution::top_k_frequent(nums, k);
         assert_eq!(ans, [1]);
     }
 
@@ -86,7 +76,7 @@ mod tests {
         let nums = vec![1, 1, 1, 2, 2, 3, 4, 4, 4];
         let k = 2;
 
-        let ans = Solution::top_k_frequent_03(nums, k);
+        let ans = Solution::top_k_frequent(nums, k);
         assert_eq!(ans, [4, 1]);
     }
 }
