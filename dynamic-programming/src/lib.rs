@@ -7,5 +7,5 @@ mod longest_increasing_subsequence;
 mod maximum_subarray;
 mod paint_fence;
 mod unique_paths;
-mod unique_paths_;
+mod unique_paths_2;
 mod word_break;
