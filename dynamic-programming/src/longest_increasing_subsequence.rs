@@ -1,19 +1,9 @@
-/*
-#25
-Given an integer array nums, return the length of the longest strictly increasing subsequence.
-
-A subsequence is a sequence that can be derived from an array by deleting some or no elements without
-changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
-
-Input: nums = [10,9,2,5,3,7,101,18]
-Output: 4
-Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
-
-*/
+// #25
 
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn length_of_lis(nums: Vec<i32>) -> i32 {
         let len_nums = nums.len();
 
@@ -33,6 +23,7 @@ impl Solution {
         longest
     }
 
+    #[allow(dead_code)]
     pub fn length_of_lis_1(nums: Vec<i32>) -> i32 {
         let mut new_set = Vec::new();
 
@@ -51,24 +42,42 @@ impl Solution {
         }
         new_set.len() as i32
     }
+    #[allow(dead_code)]
+    pub fn length_of_lis_2(nums: Vec<i32>) -> i32 {
+        let mut ret_list: Vec<i32> = vec![];
+
+        for &num in nums.iter() {
+            if let Err(e) = ret_list.binary_search(&num) {
+                if e >= ret_list.len() {
+                    ret_list.push(num);
+                } else {
+                    ret_list[e] = num;
+                }
+            }
+        }
+
+        ret_list.len() as i32
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::longest_increasing_subsequence::*;
+    use super::*;
     #[test]
-    fn test_length_of_lis() {
-        let ans = Solution::length_of_lis(vec![10, 9, 2, 5, 3, 7, 101, 18]);
+    pub fn test_length_of_lis() {
+        let ans = Solution::length_of_lis_2(vec![10, 9, 2, 5, 3, 7, 101, 18]);
         assert_eq!(ans, 4);
     }
 
-    fn test_length_of_lis_2() {
-        let ans = Solution::length_of_lis(vec![0, 1, 0, 3, 2, 3]);
+    #[test]
+    pub fn test_length_of_lis_2() {
+        let ans = Solution::length_of_lis_2(vec![0, 1, 0, 3, 2, 3]);
         assert_eq!(ans, 4);
     }
 
-    fn test_length_of_lis_3() {
-        let ans = Solution::length_of_lis(vec![7, 7, 7, 7, 7, 7, 7]);
+    #[test]
+    pub fn test_length_of_lis_3() {
+        let ans = Solution::length_of_lis_2(vec![7, 7, 7, 7, 7, 7, 7]);
         assert_eq!(ans, 1);
     }
 }
