@@ -1,19 +1,9 @@
-/*
-#33
-Given a string s and a dictionary of strings wordDict,
-return true if s can be segmented into a space-separated sequence of one or more dictionary words.
-
-Note that the same word in the dictionary may be reused multiple times in the segmentation.
-
-Input: s = "leetcode", wordDict = ["leet","code"]
-Output: true
-Explanation: Return true because "leetcode" can be segmented as "leet code".
-
-*/
+// #33
 
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn word_break(s: String, word_dict: Vec<String>) -> bool {
         let mut v: Vec<bool> = vec![false; s.len() + 1];
         v[0] = true;
