@@ -56,6 +56,7 @@ impl Solution {
             for w in 0..width {
                 if grid[h][w] == 1 || !visited[h][w] {
                     let mut count = 0;
+                    println!("{:?}", count);
                     count = Self::dfs_01(&grid, &mut visited, h, w);
                     if count > ans {
                         ans = count;
