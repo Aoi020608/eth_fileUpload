@@ -5,3 +5,4 @@ mod maximum_depth_binary_tree;
 mod merge_two_binary_trees;
 mod minimum_depth_of_binary_tree;
 mod path_sum;
+mod binary_tree_zigzag_level_order_tree;
