@@ -1,17 +1,11 @@
 /*
 #45
-Given an integer array nums of unique elements, return all possible subsets (the power set).
-
-The solution set must not contain duplicate subsets. Return the solution in any order.
-
-Input: nums = [1,2,3]
-Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
-
 */
 
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
         let mut res: Vec<Vec<i32>> = vec![vec![]];
 
@@ -25,11 +19,13 @@ impl Solution {
                 sub.push(tmp);
             }
             res.append(&mut sub);
+            println!("Sub: {:?}", res);
         }
 
         res
     }
 
+    #[allow(dead_code)]
     pub fn subsets_1(nums: Vec<i32>) -> Vec<Vec<i32>> {
         let len = nums.len();
         let mut temp: Vec<i32> = vec![];
@@ -47,8 +43,6 @@ impl Solution {
             temp.pop();
         }
 
-        println!("Result: {:?}", res);
-
         res
     }
 }
@@ -60,7 +54,7 @@ mod tests {
     #[test]
     fn test_subsets() {
         let nums = vec![1, 2, 3];
-        let result = Solution::subsets_1(nums);
+        let result = Solution::subsets(nums);
         assert_eq!(
             result,
             vec![
@@ -79,7 +73,7 @@ mod tests {
     #[test]
     fn test_subsets_1() {
         let nums = vec![0];
-        let result = Solution::subsets_1(nums);
+        let result = Solution::subsets(nums);
         assert_eq!(result, vec![vec![], vec![0],]);
     }
 }

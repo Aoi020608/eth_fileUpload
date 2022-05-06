@@ -1,6 +1,6 @@
-// mod subsets;
-// mod combination_sum;
-// mod generate_parentheses;
+mod subsets;
+mod combination_sum;
+mod generate_parentheses;
 mod permutation;
 
 #[cfg(test)]
