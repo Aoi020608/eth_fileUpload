@@ -1,8 +1,9 @@
 mod binary_tree_level_of_order_traversal;
+mod binary_tree_zigzag_level_order_tree;
 mod construct_binary_tree_from_preorder;
 mod convert_sorted_array_to_binary_search_tree;
 mod maximum_depth_binary_tree;
 mod merge_two_binary_trees;
 mod minimum_depth_of_binary_tree;
 mod path_sum;
-mod binary_tree_zigzag_level_order_tree;
+mod validate_binary_search_tree;
