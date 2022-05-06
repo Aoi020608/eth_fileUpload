@@ -64,25 +64,22 @@ impl Solution {
             }
         }
     }
-
+    #[allow(dead_code)]
     pub fn has_path_sum02(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> bool {
         match root {
             None => return false,
             Some(node) => {
-                let mut bor_node = node.borrow();
-                if target_sum == 0 {
-                    return true;
+                let bor_node = node.borrow();
+                match (&bor_node.left, &bor_node.right) {
+                    (None, None) => target_sum == bor_node.val,
+                    _ => {
+                        Self::has_path_sum02(bor_node.left.clone(), target_sum - bor_node.val)
+                            || Self::has_path_sum02(
+                                bor_node.right.clone(),
+                                target_sum - bor_node.val,
+                            )
+                    }
                 }
-
-                if bor_node.left.is_some() {
-                    Self::has_path_sum02(bor_node.left.clone(), target_sum - bor_node.val);
-                }
-
-                if bor_node.right.is_some() {
-                    Self::has_path_sum02(bor_node.right.clone(), target_sum - bor_node.val);
-                }
-
-                target_sum == 0
             }
         }
     }
