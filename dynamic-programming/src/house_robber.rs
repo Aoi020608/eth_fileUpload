@@ -1,61 +1,43 @@
-/*
-You are a professional robber planning to rob houses along a street.
-Each house has a certain amount of money stashed,
-the only constraint stopping you from robbing each of them is that adjacent
-houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
-
-Given an integer array nums representing the amount of money of each house,
-return the maximum amount of money you can rob tonight without alerting the police.
-
-Input: nums = [1,2,3,1]
-Output: 4
-Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
-Total amount you can rob = 1 + 3 = 4.
-
-Input [2, 1, 1, 2]
-Output 4
-
-
-*/
+// #29
 
 struct Solution;
 
 impl Solution {
+    #[allow(dead_code)]
     pub fn rob(nums: Vec<i32>) -> i32 {
         let len = nums.len();
-        // let ret_list = vec![];
-        let mut ans_ev = 0;
-        let mut ans_odd = 0;
-
-        if len == 0 {
-            return 0;
-        }
+        let mut temp_vec = Vec::with_capacity(len + 1);
+        temp_vec.push(nums[0]);
 
         if len == 1 {
             return nums[0];
         }
 
-        for i in 0..nums.len() {
-            // if i % 2 == 0 {
-            //     ans_ev += nums[i];
-            // } else {
-            //     ans_odd += nums[i];
-            // }
+        if nums[1] > nums[0] {
+            temp_vec.push(nums[1]);
+        } else {
+            temp_vec.push(nums[0]);
         }
 
-        if ans_ev > ans_odd {
-            return ans_ev;
-        } else {
-            return ans_odd;
+        for i in 2..len {
+            if nums[i] + temp_vec[i - 2] > temp_vec[i - 1] {
+                temp_vec.push(nums[i] + temp_vec[i - 2]);
+            } else {
+                temp_vec.push(temp_vec[i - 1]);
+            }
         }
+
+        return temp_vec[len - 1];
     }
 
+    #[allow(dead_code)]
     pub fn rob_1(nums: Vec<i32>) -> i32 {
         nums.into_iter()
             .fold((0, 0), |(a, b), x| (a.max(b + x), a))
             .0
     }
 
+    #[allow(dead_code)]
     pub fn rob_2(nums: Vec<i32>) -> i32 {
         let n = nums.len();
         let mut max_stolen = Vec::with_capacity(n + 1);
