@@ -59,27 +59,7 @@ impl Solution {
         head
     }
 
-    #[allow(dead_code)]
-    pub fn delete_duplicates_02(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut root_opt = head.as_mut();
-
-        while let Some(root_node) = root_opt {
-            let mut next_opt = root_node.next.take();
-
-            while let Some(next_node) = next_opt.as_mut() {
-                if root_node.val == next_node.val {
-                    next_opt = next_node.next.take();
-                } else {
-                    root_node.next = next_opt;
-                    break;
-                }
-            }
-
-            root_opt = root_node.next.as_mut();
-        }
-
-        head
-    }
+    
 }
 
 #[cfg(test)]
