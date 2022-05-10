@@ -1,3 +1,5 @@
+// #55
+
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
@@ -59,7 +61,26 @@ impl Solution {
         head
     }
 
-    
+    #[allow(dead_code)]
+    pub fn delete_deplicates_02(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut cur_opt = head.as_mut();
+
+        while let Some(cur_node) = cur_opt {
+            let mut next_opt = cur_node.next.take();
+
+            while let Some(next_node) = next_opt.as_mut() {
+                if cur_node.val == next_node.val {
+                    next_opt = next_node.next.take();
+                } else {
+                    cur_node.next = next_opt;
+                    break;
+                }
+            }
+
+            cur_opt = cur_node.next.as_mut();
+        }
+        head
+    }
 }
 
 #[cfg(test)]
@@ -87,7 +108,7 @@ mod tests {
             })),
         }));
 
-        let sorted = Solution::delete_duplicates(head);
+        let sorted = Solution::delete_deplicates_02(head);
         println!("{:?}", sorted);
     }
 }
