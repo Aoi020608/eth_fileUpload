@@ -79,12 +79,14 @@
     </tr>
     <tr>
         <td>
-          1
+          2
         </td>
         <td>
-          <a href="http://rustgym.com/leetcode/1"> Two Sum</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/linkedlist/src/add_two_numbers.rs"> 
+            Add Two Numbers
+          </a>
         </td>
-        <td>Easy</td>
+        <td><a href="https://github.com/Aoi1011/leet-code/issues/57"> #57</a></td>
     </tr>
   
   </tbody>
@@ -139,7 +141,7 @@
           392
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/meeting_rooms.rs"> Is Subsequence</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/is_subsequence.rs"> Is Subsequence</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/51"> #51</a>

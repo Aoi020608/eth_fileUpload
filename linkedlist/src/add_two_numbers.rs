@@ -47,7 +47,47 @@ impl Solution {
             carry = (v1 + v2 + carry) / 10;
         }
 
+        println!("V1: {}, V2: {}", v1, v2);
+
         new_node.next
+    }
+
+    #[allow(dead_code)]
+    pub fn add_two_numbers_01(
+        l1: Option<Box<ListNode>>,
+        l2: Option<Box<ListNode>>,
+    ) -> Option<Box<ListNode>> {
+        let mut l1 = l1.clone();
+        let mut l2 = l2.clone();
+        let mut head = Box::new(ListNode::new(-1));
+        let mut current = &mut head;
+
+        let mut carry = 0;
+        let mut v1 = 0;
+        let mut v2 = 0;
+
+        while l1.is_some() || l2.is_some() || carry != 0 {
+            v1 = 0;
+            v2 = 0;
+
+            if let Some(l1_node) = l1 {
+                v1 = l1_node.val;
+                l1 = l1_node.next;
+            }
+
+            if let Some(l2_node) = l2 {
+                v2 = l2_node.val;
+                l2 = l2_node.next;
+            }
+
+            current.next = Some(Box::new(ListNode::new((v1 + v2 + carry) % 10)));
+            current = current.next.as_mut().unwrap();
+            carry = (v1 + v2 + carry) / 10;
+        }
+
+        println!("V1: {}, V2: {}", v1, v2);
+
+        head.next
     }
 }
 
