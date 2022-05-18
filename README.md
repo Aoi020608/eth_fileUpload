@@ -92,6 +92,31 @@
   </tbody>
 </table>
 
+## Greedy Backtracking
+
+<table>
+  <thead>
+      <tr>
+        <th>id</th>
+        <th>code</th>
+        <th>issue</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td>
+          46
+        </td>
+        <td>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/move_zero.rs"> Permutations</a>
+        </td>
+        <td>
+            <a href="https://github.com/Aoi1011/leet-code/issues/44"> #44/a>
+        </td>
+    </tr>
+  </tbody>
+</table>
+
 ## Others
 
 <table id="leetcode" class="table-auto">
