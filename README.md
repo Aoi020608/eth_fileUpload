@@ -108,7 +108,7 @@
           46
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/other/src/move_zero.rs"> Permutations</a>
+          <a href="https://github.com/Aoi1011/leet-code/blob/main/greedy-backtracking/src/permutation.rs"> Permutations</a>
         </td>
         <td>
             <a href="https://github.com/Aoi1011/leet-code/issues/44"> #44/a>
