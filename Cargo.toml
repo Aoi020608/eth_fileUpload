@@ -1,18 +1,4 @@
 [workspace]
 members = [
-    "array",
-    "binary-search",
-    "dynamic-programming",
-    "graph",
-    "greedy-backtracking",
-    "hashmap",
-    "heap",
-    "linkedlist",
-    "other",
-    "recursion",
-    "remove-duplicates-from-sorted-list",
-    "sliding-window",
-    "stack",
-    "tree",
-    "two-sum"
+    "array-and-hashing",
 ]
