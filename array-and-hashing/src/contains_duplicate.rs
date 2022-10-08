@@ -31,4 +31,10 @@ mod tests {
         let nums = vec![1, 2, 3, 4];
         assert!(!contains_duplicate(nums));
     }
+
+    #[test]
+    fn test_many_number_test_case() {
+        let nums = vec![1, 1, 1, 3, 3, 4, 3, 2, 4, 2];
+        assert!(contains_duplicate(nums));
+    }
 }
