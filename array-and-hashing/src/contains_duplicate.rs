@@ -44,6 +44,7 @@ mod tests {
     #[test]
     fn test_does_not_contains_duplicate() {
         let nums = vec![1, 2, 3, 4];
+
         assert!(!contains_duplicate_1(nums));
     }
 
