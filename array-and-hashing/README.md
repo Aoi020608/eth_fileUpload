@@ -18,21 +18,15 @@
             Contains Duplicate
           </a>
         </td>
-        <td>
-          <a href="">code</a>
-        </td>
     </tr>
     <tr>
         <td>
-          82
+          242
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/linkedlist/src/remove_duplicates_from_sorted_list_II.rs"> 
-            Remove Duplicates from Sorted List II
+          <a href="https://leetcode.com/problems/valid-anagram/"> 
+            Valid Anagram
           </a>
-        </td>
-        <td>
-          <a href="https://github.com/Aoi1011/leet-code/issues/56"> #56</a>
         </td>
     </tr>
     <tr>
