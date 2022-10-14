@@ -1,16 +1,15 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap};
 
 #[warn(dead_code)]
 pub fn is_anagram(s: String, t: String) -> bool {
-    let mut map: HashMap<char, i8> = HashMap::new();
-    // let mut set: HashSet = HashSet::new();
+    let mut map: HashMap<char, i16> = HashMap::new();
 
     if s.len() != t.len() {
         return false;
     }
 
     for ch in s.chars() {
-        map.entry(ch).and_modify(|count| *count += 1).or_insert(0);
+        map.entry(ch).and_modify(|count| *count += 1).or_insert(1);
     }
 
     for ch in t.chars() {
@@ -18,7 +17,7 @@ pub fn is_anagram(s: String, t: String) -> bool {
     }
 
     for val in map.values() {
-        if *val == -1 {
+        if *val < 0 {
             return false;
         }
     } 
@@ -42,6 +41,14 @@ mod tests {
     fn test_is_anagram2() {
         let s = "rat".to_string();
         let t = "car".to_string();
+
+        assert!(!is_anagram(s, t));
+    }
+
+    #[test]
+    fn test_is_anagram3() {
+        let s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab".to_string();
+        let t = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba".to_string();
 
         assert!(!is_anagram(s, t));
     }
