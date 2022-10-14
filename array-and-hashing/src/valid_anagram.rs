@@ -1,4 +1,4 @@
-use std::collections::{HashMap};
+use std::collections::HashMap;
 
 #[warn(dead_code)]
 pub fn is_anagram(s: String, t: String) -> bool {
@@ -20,7 +20,16 @@ pub fn is_anagram(s: String, t: String) -> bool {
         if *val < 0 {
             return false;
         }
-    } 
+    }
+
+    true
+}
+
+#[warn(dead_code)]
+fn is_anagram2(s: String, t: String) -> bool {
+    if s.len() != t.len() {
+        return false;
+    }
 
     true
 }
