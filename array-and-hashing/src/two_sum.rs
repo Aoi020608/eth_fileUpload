@@ -27,4 +27,12 @@ mod tests {
 
         assert_eq!(two_sum(inputs, target), [0, 1]);
     }
+
+    #[test]
+    fn test_two_sum_1() {
+        let inputs = vec![3, 2, 4];
+        let target = 6;
+
+        assert_eq!(two_sum(inputs, target), [1, 2]);
+    }
 }
