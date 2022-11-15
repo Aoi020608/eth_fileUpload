@@ -3,15 +3,13 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     let mut nums_len = nums.len();
 
     for i in 0..nums.len() {
-        for j in i+1..nums_len {
+        for j in i + 1..nums_len {
             if nums[i] == (target - nums[j]) {
                 ret_vec.push(i as i32);
                 ret_vec.push(j as i32);
                 break;
             }
         }
-
-//        nums_len -= 1;
     }
 
     ret_vec
@@ -39,7 +37,7 @@ mod tests {
 
     #[test]
     fn test_two_sum_2() {
-        let inputs = vec![3,3];
+        let inputs = vec![3, 3];
         let target = 6;
 
         assert_eq!(two_sum(inputs, target), [0, 1]);
