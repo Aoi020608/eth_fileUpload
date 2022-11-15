@@ -7,6 +7,7 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
             if nums[i] == (target - nums[j]) {
                 ret_vec.push(i as i32);
                 ret_vec.push(j as i32);
+                break;
             }
         }
 
