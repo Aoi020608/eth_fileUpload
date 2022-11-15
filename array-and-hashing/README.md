@@ -31,14 +31,13 @@
     </tr>
     <tr>
         <td>
-          2
+          1
         </td>
         <td>
-          <a href="https://github.com/Aoi1011/leet-code/blob/main/linkedlist/src/add_two_numbers.rs"> 
-            Add Two Numbers
+          <a href="https://leetcode.com/problems/two-sum/"> 
+            Two Sum
           </a>
         </td>
-        <td><a href="https://github.com/Aoi1011/leet-code/issues/57"> #57</a></td>
     </tr>
   
   </tbody>
