@@ -3,7 +3,7 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     let mut nums_len = nums.len();
 
     for i in 0..nums.len() {
-        for j in i..nums_len {
+        for j in i+1..nums_len {
             if nums[i] == (target - nums[j]) {
                 ret_vec.push(i as i32);
                 ret_vec.push(j as i32);
@@ -11,7 +11,7 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
             }
         }
 
-        nums_len -= 1;
+//        nums_len -= 1;
     }
 
     ret_vec
