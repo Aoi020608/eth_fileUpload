@@ -1,6 +1,5 @@
 use std::collections::{HashMap, HashSet};
 
-#[allow(dead_code)]
 pub fn contains_duplicate(nums: Vec<i32>) -> bool {
     let contain = false;
 
@@ -16,7 +15,6 @@ pub fn contains_duplicate(nums: Vec<i32>) -> bool {
     contain
 }
 
-#[allow(dead_code)]
 pub fn contains_duplicate_1(nums: Vec<i32>) -> bool {
     let mut set = HashSet::new();
 
