@@ -1,36 +1,32 @@
 use std::collections::HashMap;
 
-struct Solution {}
+pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+    let mut ret_vec = Vec::new();
+    let clone_strs = strs.clone();
 
-impl Solution {
-    pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
-        let mut ret_vec = Vec::new();
-        let mut clone_strs = strs.clone();
-
-        for str in clone_strs {
-            let mut map: HashMap<&str, &str> = HashMap::new();
-        }
-
-        ret_vec.push(vec!["".to_string()]);
-
-        ret_vec
+    for str in clone_strs {
+        let mut map: HashMap<&str, &str> = HashMap::new();
     }
 
-    pub fn group_anagrams_solution(strs: Vec<String>) -> Vec<Vec<String>> {
-        let mut h = HashMap::<String, Vec<String>>::new();
+    ret_vec.push(vec!["".to_string()]);
 
-        for s in strs {
-            h.entry(Self::get_sorted(&s)).or_default().push(s)
-        }
+    ret_vec
+}
 
-        h.into_iter().map(|(_, v)| v).collect::<Vec<Vec<String>>>()
+pub fn group_anagrams_solution(strs: Vec<String>) -> Vec<Vec<String>> {
+    let mut h = HashMap::<String, Vec<String>>::new();
+
+    for s in strs {
+        h.entry(get_sorted(&s)).or_default().push(s)
     }
 
-    fn get_sorted(s: &str) -> String {
-        let mut chars: Vec<_> = s.chars().collect();
-        chars.sort();
-        chars.iter().collect::<String>()
-    }
+    h.into_iter().map(|(_, v)| v).collect::<Vec<Vec<String>>>()
+}
+
+fn get_sorted(s: &str) -> String {
+    let mut chars: Vec<_> = s.chars().collect();
+    chars.sort();
+    chars.iter().collect::<String>()
 }
 
 #[cfg(test)]
@@ -49,7 +45,7 @@ mod tests {
         ];
 
         assert_eq!(
-            Solution::group_anagrams_solution(inputs),
+            group_anagrams_solution(inputs),
             [vec!["bat"], vec!["nat", "tan"], vec!["ate", "eat", "tea"]]
         );
     }

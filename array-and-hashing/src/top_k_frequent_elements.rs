@@ -1,35 +1,32 @@
 use std::collections::HashMap;
 
-struct Solution {}
+pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
+    let mut arr = Vec::<i32>::new();
+    let mut map: HashMap<i32, u32> = HashMap::new();
+    let mut clo_nums = nums.clone();
 
-impl Solution {
-    pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
-        let mut arr = Vec::<i32>::new();
-        let mut map: HashMap<i32, u32> = HashMap::new();
-        let mut clo_nums = nums.clone();
-
-        for num in clo_nums {
-            map.entry(num).and_modify(|count| *count += 1).or_insert(0);
-        }
-
-        let clo_map = map.clone();
-        let mut val_arrs: Vec<u32> = clo_map.into_iter().map(|(_, val)| val).collect();
-        val_arrs.sort();
-        val_arrs.reverse();
-        // let map_len = clo_map.len();
-
-        for (key, val) in map.into_iter() {
-            for val_arr in val_arrs.iter() {
-                if val == *val_arr {
-                    arr.push(key);
-                    break;
-                }
-            }
-        }
-
-        // map.into_iter().map(|(key, val)| val);
-        arr.split_at(k as usize).0.to_vec()
+    for num in clo_nums {
+        map.entry(num).and_modify(|count| *count += 1).or_insert(0);
     }
+
+    // let mut vec: Vec<(i32, i32)> = map.into_iter().collect();
+
+    arr.split_at(k as usize).0.to_vec()
+}
+
+pub fn top_k_frequent_2(nums: Vec<i32>, k: i32) -> Vec<i32> {
+    let mut map: HashMap<i32, i32> = HashMap::new();
+    for n in nums {
+        let val = map.entry(n).or_insert(0);
+        *val += 1;
+    }
+    let mut res: Vec<_> = map.iter_mut().collect();
+    res.sort_by(|(_, v1), (_, v2)| v1.partial_cmp(v2).unwrap());
+    res.into_iter()
+        .rev()
+        .take(k as usize)
+        .map(|(k, _)| *k)
+        .collect()
 }
 
 #[cfg(test)]
@@ -41,6 +38,6 @@ mod tests {
         let nums = vec![1, 1, 1, 2, 2, 3];
         let k = 2i32;
 
-        assert_eq!(Solution::top_k_frequent(nums, k), [1, 2]);
+        assert_eq!(top_k_frequent_2(nums, k), [1, 2]);
     }
 }
