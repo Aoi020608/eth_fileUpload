@@ -2,14 +2,8 @@ use std::collections::HashMap;
 
 pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
     let mut arr = Vec::<i32>::new();
-    let mut map: HashMap<i32, u32> = HashMap::new();
-    let mut clo_nums = nums.clone();
-
-    for num in clo_nums {
-        map.entry(num).and_modify(|count| *count += 1).or_insert(0);
-    }
-
-    // let mut vec: Vec<(i32, i32)> = map.into_iter().collect();
+    // let clo_nums = nums.clone();
+    // let count_arr: [i32; clo_nums.len()];
 
     arr.split_at(k as usize).0.to_vec()
 }
