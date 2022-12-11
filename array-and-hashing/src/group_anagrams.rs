@@ -4,8 +4,8 @@ pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
     let mut ret_vec = Vec::new();
     let clone_strs = strs.clone();
 
-    for str in clone_strs {
-        let mut map: HashMap<&str, &str> = HashMap::new();
+    for _str in clone_strs {
+        let _map: HashMap<&str, &str> = HashMap::new();
     }
 
     ret_vec.push(vec!["".to_string()]);

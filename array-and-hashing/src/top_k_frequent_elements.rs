@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-pub fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
-    let mut arr = Vec::<i32>::new();
+pub fn top_k_frequent(_nums: Vec<i32>, k: i32) -> Vec<i32> {
+    let arr = Vec::<i32>::new();
     // let clo_nums = nums.clone();
     // let count_arr: [i32; clo_nums.len()];
 
