@@ -3,7 +3,7 @@ use std::{collections::HashSet};
 pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
     let mut rows: Vec<HashSet<char>> = vec![HashSet::new(); 9];
     let mut columns: Vec<HashSet<char>> = vec![HashSet::new(); 9];
-    let mut squares: Vec<Vec<HashSet<char>>> = vec![vec![HashSet::new(); 9]; 9];
+    let mut squares: Vec<Vec<HashSet<char>>> = vec![vec![HashSet::new(); 3]; 3];
 
     for r in 0..9 {
         for c in 0..9 {
