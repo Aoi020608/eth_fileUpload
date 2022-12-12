@@ -31,7 +31,12 @@ pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
 }
 
 pub fn longest_consecutive_2(nums: Vec<i32>) -> i32 {
-    let num_set: HashSet<i32> = HashSet::from_iter(nums.clone()); 
+    // let num_set: HashSet<i32> = HashSet::from_iter(nums.clone()); 
+    let mut num_set: HashSet<i32> = HashSet::new(); 
+    let clo_nums = nums.clone();
+    for n in clo_nums {
+        num_set.insert(n);
+    }
     let mut longest = 0;
 
     for n in nums {
