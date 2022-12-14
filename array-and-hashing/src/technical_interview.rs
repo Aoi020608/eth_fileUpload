@@ -1,3 +1,5 @@
+use std::vec;
+
 pub fn question_1() -> Vec<i32> {
     let mut array = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
     let array_len = array.len();
