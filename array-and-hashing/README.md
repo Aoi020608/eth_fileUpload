@@ -39,6 +39,15 @@
           </a>
         </td>
     </tr>
-  
+  <tr>
+        <td>
+          1
+        </td>
+        <td>
+          <a href="https://leetcode.com/problems/two-sum/"> 
+            Two Sum
+          </a>
+        </td>
+    </tr>
   </tbody>
 </table>
