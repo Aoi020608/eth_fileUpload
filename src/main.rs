@@ -1,9 +1,12 @@
 use std::borrow::Cow;
 
 use byteorder::{LittleEndian, BigEndian};
+use electrum_client::{Client, ElectrumApi};
 
 fn main() {
-    println!("Hello, world!");
+    let mut client = Client::new("tcp://electrum.blockstream.info:50001").unwrap();
+    let response = client.server_features().unwrap();
+    println!("Server version: {}", response.server_version);
 }
 
 trait Version {

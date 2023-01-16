@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 byteorder = "1.4.3"
+electrum-client = "0.12.0"
