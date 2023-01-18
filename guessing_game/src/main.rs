@@ -3,21 +3,15 @@ use std::io;
 use rand::Rng;
 
 fn main() {
-    let mut s = String::from("hello world");
+    let v = vec![1, 2, 3, 4, 5];
 
-    let word = first_word(&s);
+    let third: &i32 = &v[2];
+    println!("The third element is {}", third);
 
-    println!("the first word is: {}", word);
-}
-
-fn first_word(s: &String) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
+    let third: Option<&i32> = v.get(2);
+    match third {
+        Some(third) => println!("The third element is {}", third),
+        None  => println!("There is not third element."),
     }
-
-    &s[..]
 }
+
