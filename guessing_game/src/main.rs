@@ -3,13 +3,21 @@ use std::io;
 use rand::Rng;
 
 fn main() {
-    let mut number = 3;
+    let mut s = String::from("hello world");
 
-    while number != 0 {
-    println!("{number}");
+    let word = first_word(&s);
 
-        number -= 1;
+    println!("the first word is: {}", word);
+}
+
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
     }
 
-    println!("LIFTOFF!!");
+    &s[..]
 }
