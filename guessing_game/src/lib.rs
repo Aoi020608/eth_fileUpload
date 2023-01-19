@@ -1,4 +1,4 @@
-fn main() {
+fn guessing_game() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
 
