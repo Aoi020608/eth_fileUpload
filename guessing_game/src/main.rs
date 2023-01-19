@@ -1,11 +1,36 @@
 use std::collections::HashMap;
 
-fn main() {
-    let mut h = HashMap::new();
-    h.insert("k1", 0);
-    h.insert("k2", 1);
+struct Point<T> {
+    x: T,
+    y: T,
+}
 
-    let v1 = &h["k1"];
-    let v2 = &h["k2"];
-    println!("{} {}", v1, v2);
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+
+fn main() {
+    let number_list = vec![34, 50, 25, 100, 65];
+
+    let res = largest(&number_list);
+    println!("The largest number is {res}");
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+
+    let res = largest(&char_list);
+    println!("The largest char is {res}");
+}
+
+fn largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
 }
