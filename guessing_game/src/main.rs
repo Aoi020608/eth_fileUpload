@@ -1,17 +1,11 @@
-use std::io;
-
-use rand::Rng;
+use std::collections::HashMap;
 
 fn main() {
-    let v = vec![1, 2, 3, 4, 5];
+    let mut h = HashMap::new();
+    h.insert("k1", 0);
+    h.insert("k2", 1);
 
-    let third: &i32 = &v[2];
-    println!("The third element is {}", third);
-
-    let third: Option<&i32> = v.get(2);
-    match third {
-        Some(third) => println!("The third element is {}", third),
-        None  => println!("There is not third element."),
-    }
+    let v1 = &h["k1"];
+    let v2 = &h["k2"];
+    println!("{} {}", v1, v2);
 }
-
