@@ -1,4 +1,3 @@
-
 pub fn greeting(name: &str) -> String {
     format!("Hello: {}!", name)
 }
@@ -15,43 +14,33 @@ impl Rectangle {
     }
 }
 
+fn prints_and_returns_10(a: i32) -> i32 {
+    println!("I got the value {a}");
+    10
+}
+
+pub fn add_two(a: i32) -> i32 {
+    a + 2
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn greeting_contains_name() {
-        let result = greeting("Carol");
-        assert!(result.contains("Carol"));
+    fn add_two_and_two() {
+        assert_eq!(4, add_two(2));
     }
 
     #[test]
-    fn larger_can_hold_smaller() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-
-        let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
-
-        assert!(larger.can_hold(&smaller));
+    fn add_three_and_two() {
+        assert_eq!(5, add_two(3));
     }
 
     #[test]
-    fn smaller_cannot_hold_larger() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-
-       let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
-
-        assert!(!smaller.can_hold(&larger));
+    fn one_hundred() {
+        assert_eq!(102, add_two(100));
     }
+
+
 }
