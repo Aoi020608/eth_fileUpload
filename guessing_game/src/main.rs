@@ -1,54 +1,29 @@
-use std::collections::HashMap;
-
-pub trait Summary {
-    fn summary(&self) -> String;
-}
-
-pub struct NewsArticle {
-    pub headline: String,
-    pub location: String,
-    pub author: String,
-    pub content: String,
-}
-
-impl Summary for NewsArticle {
-    fn summary(&self) -> String {
-        format!("{}, by {} ({})", self.headline, self.author, self.location)
-    }
-}
-
-pub struct Tweet {
-    pub username: String,
-    pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
-}
-
-impl Summary for Tweet {
-    fn summary(&self) -> String {
-        format!("{}: {}", self.username, self.content)
-    }
-}
-
 fn main() {
-    let news_article = Tweet {
-        username: String::from("hello"),
-        content: String::from("of course"),
-        reply: false,
-        retweet: false,
-    };
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
 
-    println!("1 new tweet: {}", news_article.summary());
+   let result = longest(string1.as_str(), string2);
+    println!("The longest string is {}", result);
 }
 
-fn largest<T: PartialOrd>(list: &[T]) -> &T {
-    let mut largest = &list[0];
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
 
-    for item in list {
-        if item > largest {
-            largest = item;
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
         }
     }
 
-    largest
+    &s[..]
 }
+
+
