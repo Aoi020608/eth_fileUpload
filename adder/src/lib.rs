@@ -41,6 +41,4 @@ mod tests {
     fn one_hundred() {
         assert_eq!(102, add_two(100));
     }
-
-
 }
