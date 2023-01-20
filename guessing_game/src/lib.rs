@@ -1,4 +1,5 @@
-fn guessing_game() {
+
+pub fn guessing_game() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
 
@@ -6,7 +7,8 @@ fn guessing_game() {
     println!("The longest string is {}", result);
 }
 
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+
+pub fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
         x
     } else {
@@ -14,7 +16,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     }
 }
 
-fn first_word(s: &str) -> &str {
+pub fn first_word(s: &str) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -27,7 +29,7 @@ fn first_word(s: &str) -> &str {
 }
 
 pub struct Guess {
-    value: i32,
+    pub value: i32,
 }
 
 impl Guess {
