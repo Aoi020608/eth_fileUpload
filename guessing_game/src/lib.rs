@@ -1,4 +1,3 @@
-
 pub fn guessing_game() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -6,7 +5,6 @@ pub fn guessing_game() {
     let result = longest(string1.as_str(), string2);
     println!("The longest string is {}", result);
 }
-
 
 pub fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
