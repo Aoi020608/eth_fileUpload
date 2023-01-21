@@ -1,5 +1,5 @@
 use std::error::Error;
-use std::{fs, env};
+use std::{env, fs};
 
 pub struct Config {
     pub query: String,
@@ -18,7 +18,11 @@ impl Config {
 
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
-        Ok(Config { query, file_path, ignore_case })
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
     }
 }
 
@@ -28,7 +32,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let results = if config.ignore_case {
         search_case_insensitive(&config.query, &contents)
     } else {
-search(&config.query, &contents)
+        search(&config.query, &contents)
     };
 
     for line in results {
@@ -55,7 +59,7 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.to_lowercase().contains(&query)  {
+        if line.to_lowercase().contains(&query) {
             results.push(line.trim());
         }
     }
@@ -88,6 +92,9 @@ mod tests {
             Pick three.
             Trust me.";
 
-        assert_eq!(vec!["Rust:", "Trust me."], search_case_insensitive(query, contents));
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            search_case_insensitive(query, contents)
+        );
     }
 }
