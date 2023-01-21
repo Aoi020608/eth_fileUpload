@@ -3,4 +3,5 @@ members = [
 	"guessing_game",
 	"adder",
 	"minigrep",
+	"smart-pointer",
 ]
