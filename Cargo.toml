@@ -6,4 +6,5 @@ members = [
 	"smart-pointer",
 	"concurrency",
 	"object",
+	"patterns",
 ]
