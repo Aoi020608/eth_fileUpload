@@ -4,4 +4,6 @@ members = [
 	"adder",
 	"minigrep",
 	"smart-pointer",
+	"concurrency",
+	"object",
 ]

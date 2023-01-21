@@ -1,5 +1,7 @@
 use std::{cell::RefCell, ops::Deref, rc::Rc};
 
+mod node;
+
 pub trait Messenger {
     fn send(&self, msg: &str);
 }
