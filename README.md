@@ -1,6 +1,12 @@
-# Bitcoin SPV Wallet
+# Rust TCP Implementation
 
-## Description
-### What is Simplified Payment Verification(SPV)? 
+## DESCRIPTION
+### 
 
+## DEPENDENCIES
+- [etherparse](https://docs.rs/etherparse/latest/etherparse/index.html)
+
+## REFERENCE
+- https://www.rfc-editor.org/rfc/rfc793
+- []()
 
