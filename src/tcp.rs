@@ -134,6 +134,10 @@ impl Connection {
             ],
         );
 
+        syn_ack.checksum = syn_ack
+            .calc_checksum_ipv4(&ip, &[])
+            .expect("failed to compute checksum");
+
         // write out the header
         let unwritten = {
             let mut unwritten = &mut buf[..];
@@ -142,6 +146,7 @@ impl Connection {
             unwritten.len()
         };
 
+        eprintln!("responding with {:02x?}", &buf[..unwritten]);
         nic.send(&buf[..unwritten])?;
         Ok(Some(c))
     }
@@ -153,6 +158,6 @@ impl Connection {
         tcph: etherparse::TcpHeaderSlice<'a>,
         data: &'a [u8],
     ) -> io::Result<()> {
-        unimplemented!()
+        Ok(())
     }
 }
