@@ -18,12 +18,17 @@ fn main() -> io::Result<()> {
     let mut buf = [0u8; 1504]; // MTU
     loop {
         let nbytes = nic.recv(&mut buf[..])?;
+
+        // if s/without_packet_info/new/:
+        //
         // let _eth_flags = u16::from_be_bytes([buf[0], buf[1]]);
         // let eth_proto = u16::from_be_bytes([buf[2], buf[3]]);
         // if eth_proto != 0x800 {
         //      // not ipv4
         //     continue;
         // }
+        //
+        // and also include on send
 
         match etherparse::Ipv4HeaderSlice::from_slice(&buf[..nbytes]) {
             Ok(iph) => {
