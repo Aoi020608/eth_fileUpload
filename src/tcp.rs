@@ -109,7 +109,7 @@ impl Connection {
             send: SendSequenceSpace {
                 iss,
                 una: iss,
-                nxt: iss,
+                nxt: iss + 1,
                 wnd,
                 up: false,
                 wl1: 0,
@@ -158,12 +158,13 @@ impl Connection {
             buf.len(),
             self.tcp.header_len() as usize + self.ip.header_len() + payload.len(),
         );
-        self.ip.set_payload_len(size);
+        self.ip.set_payload_len(size - self.ip.header_len());
 
         // the kernel is nice and does this for us
-        // self.tcp.checksum = self.tcp
-        //     .calc_checksum_ipv4(&self.ip, &[])
-        //     .expect("failed to compute checksum");
+        self.tcp.checksum = self
+            .tcp
+            .calc_checksum_ipv4(&self.ip, &[])
+            .expect("failed to compute checksum");
 
         // write out the header
         let mut unwritten = &mut buf[..];
@@ -249,7 +250,7 @@ impl Connection {
         let ackn = tcph.acknowledgment_number();
         if let State::SynRcvd = self.state {
             // expect to get an ACK for out SYN
-            if !is_between_wrapped(
+            if is_between_wrapped(
                 self.send.una.wrapping_sub(1),
                 ackn,
                 self.send.nxt.wrapping_add(1),
@@ -292,20 +293,20 @@ impl Connection {
                     self.write(nic, &[])?;
                     self.state = State::FinWait1;
                 }
-            _ => unreachable!(),
+                _ => unreachable!(),
             }
         }
 
-        if let State::FinWait2 = self.state {
-            if !tcph.fin() || !data.is_empty() {
-                unimplemented!();
-            }
+        // if let State::FinWait2 = self.state {
+        //     if !tcph.fin() || !data.is_empty() {
+        //         unimplemented!();
+        //     }
 
-            // must have ACKed our FIN, since we detected at least one acked byte,
-            // and we have only sent one byte (the FIN).
-            self.write(nic, &[])?;
-            self.state = State::TimeWait;
-        }
+        //     // must have ACKed our FIN, since we detected at least one acked byte,
+        //     // and we have only sent one byte (the FIN).
+        //     self.write(nic, &[])?;
+        //     self.state = State::TimeWait;
+        // }
 
         Ok(())
     }
