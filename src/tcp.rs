@@ -314,64 +314,17 @@ impl Connection {
     }
 }
 
+fn wrapping_lt(lhs: u32, rhs: u32) -> bool {
+    // From RFC1323:
+    // TCP determines if a data segment is "old" or "new" by testing
+    // whether its sequence number is within 2**31 bytes of the left edge
+    // of the window, and if it is not, discarding the data as "old". To
+    // insure that new data is never mistakenly considered old and vice-versa, 
+    // the left edge of the sender's window has to be at most 
+    // 2 ** 31 away from the right edge of the receiver's window
+    lhs.wrapping_sub(rhs) > 2 ^ 31
+}
+
 fn is_between_wrapped(start: u32, x: u32, end: u32) -> bool {
-    match start.cmp(&x) {
-        Ordering::Equal => false,
-        Ordering::Less => {
-            // we have:
-            //
-            //     |------------S----------X--------------------|
-            //
-            // X is between S and E (S < X < E) in these cases:
-            //
-            //     |------------S----------X-----E--------------|
-            //
-            //     |--------E---S----------X--------------------|
-            //
-            // but *not* in these cases
-            //
-            //     |------------S---E------X--------------------|
-            //
-            //     |------------|----------X--------------------|
-            //                  ^-S+E
-            //
-            //     |------------S----------|--------------------|
-            //                             ^-X+E
-            //
-            //or, in other words, iff !(S <= E <= X)
-            if end >= start && end <= x {
-                return false;
-            }
-            return true;
-        }
-        Ordering::Greater => {
-            // check is okay iff n is between u and a
-            // we have the opposite above:
-            //
-            //     |------------X----------S--------------------|
-            //
-            // X is between S and E (S < X < E) only in this cases:
-            //
-            //     |------------X---E------S--------------------|
-            //
-            // but *not* in these cases
-            //
-            //     |------------X---S------E--------------------|
-            //
-            //     |---------E--X----------S--------------------|
-            //
-            //     |------------|----------S--------------------|
-            //                  ^-X+E
-            //
-            //     |------------X----------|--------------------|
-            //                             ^-S+E
-            //
-            //or, in other words, iff !(S < E < X) (iff => if and only if)
-            if end < start && end > x {
-            } else {
-                return false;
-            }
-            return true;
-        }
-    }
+    wrapping_lt(start, x) && wrapping_lt(x, end)
 }

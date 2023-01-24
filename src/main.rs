@@ -4,18 +4,7 @@ use std::{
     net::Ipv4Addr,
 };
 
-mod tcp;
-
-#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq)]
-struct Quad {
-    src: (Ipv4Addr, u16),
-    dst: (Ipv4Addr, u16),
-}
-
 fn main() -> io::Result<()> {
-    let mut connections: HashMap<Quad, tcp::Connection> = Default::default();
-    let mut nic = tun_tap::Iface::without_packet_info("tun0", tun_tap::Mode::Tun)?;
-    let mut buf = [0u8; 1504]; // MTU
     loop {
         let nbytes = nic.recv(&mut buf[..])?;
 
