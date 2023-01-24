@@ -28,8 +28,8 @@ pub struct Connection {
     ip: etherparse::Ipv4Header,
     tcp: etherparse::TcpHeader,
 
-    pub incoming: VecDeque<u8>,
-    pub unacked: VecDeque<u8>,
+    pub(crate) incoming: VecDeque<u8>,
+    pub(crate) unacked: VecDeque<u8>,
 }
 
 /// State of Send Sequence Space (RFC 793 S3.2)
@@ -142,6 +142,9 @@ impl Connection {
                 ],
             ),
             tcp: etherparse::TcpHeader::new(tcph.destination_port(), tcph.source_port(), iss, wnd),
+
+            incoming: Default::default(),
+            unacked: Default::default(),
         };
 
         // need to start establishing a connection
