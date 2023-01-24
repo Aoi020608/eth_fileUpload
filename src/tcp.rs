@@ -1,5 +1,5 @@
 use std::{
-    cmp::Ordering,
+    collections::VecDeque,
     io::{self, Write},
 };
 
@@ -27,6 +27,9 @@ pub struct Connection {
     recv: RecvSequenceSpace,
     ip: etherparse::Ipv4Header,
     tcp: etherparse::TcpHeader,
+
+    pub incoming: VecDeque<u8>,
+    pub unacked: VecDeque<u8>,
 }
 
 /// State of Send Sequence Space (RFC 793 S3.2)
@@ -319,8 +322,8 @@ fn wrapping_lt(lhs: u32, rhs: u32) -> bool {
     // TCP determines if a data segment is "old" or "new" by testing
     // whether its sequence number is within 2**31 bytes of the left edge
     // of the window, and if it is not, discarding the data as "old". To
-    // insure that new data is never mistakenly considered old and vice-versa, 
-    // the left edge of the sender's window has to be at most 
+    // insure that new data is never mistakenly considered old and vice-versa,
+    // the left edge of the sender's window has to be at most
     // 2 ** 31 away from the right edge of the receiver's window
     lhs.wrapping_sub(rhs) > 2 ^ 31
 }
