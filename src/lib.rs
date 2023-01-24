@@ -77,6 +77,7 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
                 let dst = iph.destination_addr();
 
                 if iph.protocol() != 0x06 {
+                    eprintln!("BAD PROTOCOL");
                     // not tcp
                     continue;
                 }
@@ -84,20 +85,23 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
                 match etherparse::TcpHeaderSlice::from_slice(&buf[iph.slice().len()..nbytes]) {
                     Ok(tcph) => {
                         let datai = iph.slice().len() + tcph.slice().len();
-                        let mut cm = ih.manager.lock().unwrap();
-                        let cm = &mut *cm;
+                        let mut cmg = ih.manager.lock().unwrap();
+                        let cm = &mut *cmg;
                         let q = Quad {
                             src: (src, tcph.source_port()),
                             dst: (dst, tcph.destination_port()),
                         };
                         match cm.connections.entry(q) {
                             Entry::Occupied(mut c) => {
+                                eprintln!("got packet for known quad: {:?}", q);
                                 c.get_mut()
                                     .on_packet(&mut nic, iph, tcph, &buf[datai..nbytes])?;
                             }
                             Entry::Vacant(e) => {
+                                eprintln!("got packet for unknown quad {:?}", q);
                                 if let Some(pending) = cm.pending.get_mut(&tcph.destination_port())
                                 {
+                                    eprintln!("listening, so accepting");
                                     if let Some(c) = tcp::Connection::accept(
                                         &mut nic,
                                         iph,
@@ -106,8 +110,8 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
                                     )? {
                                         e.insert(c);
                                         pending.push_back(q);
-
-                                        // TODO: wake up pending accept()
+                                        drop(cmg);
+                                        ih.pending_var.notify_all();
                                     }
                                 }
                             }
@@ -210,10 +214,11 @@ pub struct TcpStream {
 impl Drop for TcpStream {
     fn drop(&mut self) {
         let mut cm = self.h.manager.lock().unwrap();
-        if let Some(_c) = cm.connections.remove(&self.quad) {
-            // TODO: send FIN on cm.connections[quad]
-            unimplemented!();
-        };
+        // TODO: send FIN on cm.connections[quad]
+        // TODO: _eventually_ remove self.quad from cm.connections
+        // if let Some(_c) = cm.connections.remove(&self.quad) {
+            // unimplemented!();
+        // };
     }
 }
 
