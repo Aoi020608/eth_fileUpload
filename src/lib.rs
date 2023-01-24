@@ -2,7 +2,7 @@ use std::{
     collections::{hash_map::Entry, HashMap, VecDeque},
     io::{self, Read, Write},
     net::{Ipv4Addr, Shutdown},
-    sync::{Arc, Mutex},
+    sync::{Arc, Condvar, Mutex},
     thread,
 };
 
@@ -16,7 +16,13 @@ struct Quad {
     dst: (Ipv4Addr, u16),
 }
 
-type InterfaceHandle = Arc<Mutex<ConnectionManager>>;
+#[derive(Default)]
+struct Foobar {
+    manager: Mutex<ConnectionManager>,
+    pending_var: Condvar,
+}
+
+type InterfaceHandle = Arc<Foobar>;
 
 pub struct Interface {
     ih: Option<InterfaceHandle>,
@@ -25,7 +31,7 @@ pub struct Interface {
 
 impl Drop for Interface {
     fn drop(&mut self) {
-        self.ih.as_mut().unwrap().lock().unwrap().terminate = true;
+        self.ih.as_mut().unwrap().manager.lock().unwrap().terminate = true;
 
         drop(self.ih.take());
         self.jh
@@ -78,7 +84,7 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
                 match etherparse::TcpHeaderSlice::from_slice(&buf[iph.slice().len()..nbytes]) {
                     Ok(tcph) => {
                         let datai = iph.slice().len() + tcph.slice().len();
-                        let mut cm = ih.lock().unwrap();
+                        let mut cm = ih.manager.lock().unwrap();
                         let cm = &mut *cm;
                         let q = Quad {
                             src: (src, tcph.source_port()),
@@ -129,11 +135,14 @@ impl Interface {
             thread::spawn(move || packet_loop(nic, ih))
         };
 
-        Ok(Interface { ih: Some(ih), jh: Some(jh) })
+        Ok(Interface {
+            ih: Some(ih),
+            jh: Some(jh),
+        })
     }
 
     pub fn bind(&mut self, port: u16) -> io::Result<TcpListener> {
-        let mut cm = self.ih.as_mut().unwrap().lock().unwrap();
+        let mut cm = self.ih.as_mut().unwrap().manager.lock().unwrap();
         match cm.pending.entry(port) {
             Entry::Vacant(v) => {
                 v.insert(VecDeque::new());
@@ -160,7 +169,7 @@ pub struct TcpListener {
 
 impl Drop for TcpListener {
     fn drop(&mut self) {
-        let mut cm = self.h.lock().unwrap();
+        let mut cm = self.h.manager.lock().unwrap();
         let pending = cm
             .pending
             .remove(&self.port)
@@ -174,23 +183,21 @@ impl Drop for TcpListener {
 
 impl TcpListener {
     pub fn accept(&mut self) -> io::Result<TcpStream> {
-        let mut cm = self.h.lock().unwrap();
-        if let Some(quad) = cm
-            .pending
-            .get_mut(&self.port)
-            .expect("port closed while listener still active")
-            .pop_front()
-        {
-            Ok(TcpStream {
-                quad,
-                h: self.h.clone(),
-            })
-        } else {
-            // TODO: block
-            return Err(io::Error::new(
-                io::ErrorKind::WouldBlock,
-                "no connection to accept",
-            ));
+        let mut cm = self.h.manager.lock().unwrap();
+        loop {
+            if let Some(quad) = cm
+                .pending
+                .get_mut(&self.port)
+                .expect("port closed while listener still active")
+                .pop_front()
+            {
+                return Ok(TcpStream {
+                    quad,
+                    h: self.h.clone(),
+                });
+            }
+
+            cm = self.h.pending_var.wait(cm).unwrap();
         }
     }
 }
@@ -202,8 +209,8 @@ pub struct TcpStream {
 
 impl Drop for TcpStream {
     fn drop(&mut self) {
-        let mut cm = self.h.lock().unwrap();
-        if let Some(c) = cm.connections.remove(&self.quad) {
+        let mut cm = self.h.manager.lock().unwrap();
+        if let Some(_c) = cm.connections.remove(&self.quad) {
             // TODO: send FIN on cm.connections[quad]
             unimplemented!();
         };
@@ -212,7 +219,7 @@ impl Drop for TcpStream {
 
 impl Read for TcpStream {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let mut cm = self.h.lock().unwrap();
+        let mut cm = self.h.manager.lock().unwrap();
         let c = cm.connections.get_mut(&self.quad).ok_or_else(|| {
             io::Error::new(
                 io::ErrorKind::ConnectionAborted,
@@ -248,7 +255,7 @@ impl Read for TcpStream {
 
 impl Write for TcpStream {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        let mut cm = self.h.lock().unwrap();
+        let mut cm = self.h.manager.lock().unwrap();
         let c = cm.connections.get_mut(&self.quad).ok_or_else(|| {
             io::Error::new(
                 io::ErrorKind::ConnectionAborted,
@@ -273,7 +280,7 @@ impl Write for TcpStream {
     }
 
     fn flush(&mut self) -> io::Result<()> {
-        let mut cm = self.h.lock().unwrap();
+        let mut cm = self.h.manager.lock().unwrap();
         let c = cm.connections.get_mut(&self.quad).ok_or_else(|| {
             io::Error::new(
                 io::ErrorKind::ConnectionAborted,
