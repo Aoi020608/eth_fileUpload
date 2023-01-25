@@ -161,7 +161,7 @@ impl Connection {
             ip: etherparse::Ipv4Header::new(
                 0,
                 64,
-                etherparse::IpNumber::Tcp as u8,
+                etherparse::IpTrafficClass::Tcp,
                 [
                     iph.destination()[0],
                     iph.destination()[1],

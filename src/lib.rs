@@ -72,10 +72,8 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
         //
         // and also include on send
 
-
         match etherparse::Ipv4HeaderSlice::from_slice(&buf[..nbytes]) {
             Ok(iph) => {
-                eprintln!("from packet_loop function");
                 let src = iph.source_addr();
                 let dst = iph.destination_addr();
 
@@ -149,6 +147,7 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
 
 impl Interface {
     pub fn new() -> io::Result<Self> {
+        eprintln!("Hello from new function");
         let nic = tun_tap::Iface::without_packet_info("tun0", tun_tap::Mode::Tun)?;
 
         let ih: InterfaceHandle = Arc::default();
