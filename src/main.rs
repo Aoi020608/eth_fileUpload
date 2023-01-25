@@ -15,7 +15,7 @@ fn main() -> io::Result<()> {
                     eprintln!("no more data!");
                     break;
                 } else {
-                    println!("got {:?}", &buf[..n]);
+                    println!("{}", std::str::from_utf8(&buf[..n]).unwrap());
                 }
             }
         }
