@@ -3,6 +3,16 @@ use std::{
     io::{self, Write},
 };
 
+use bitflags::bitflags;
+
+bitflags! {
+    pub struct Available: u8 {
+        const READ = 0b00000001;
+        const WRITE = 0b00000010;
+    }
+}
+
+#[derive(Debug)]
 enum State {
     // Listen,
     SynRcvd,
@@ -30,6 +40,30 @@ pub struct Connection {
 
     pub(crate) incoming: VecDeque<u8>,
     pub(crate) unacked: VecDeque<u8>,
+}
+
+impl Connection {
+    pub(crate) fn is_rcv_closed(&self) -> bool {
+        eprintln!("asked if closed when in {:?}", self.state);
+        if let State::TimeWait = self.state {
+            // TODO: any state after rcvd FIN, so also CLOSE-WAIT, LAST-ACK, CLOSED, CLOSING
+            true
+        } else {
+            false
+        }
+    }
+
+    fn availability(&self) -> Available {
+        let mut a = Available::empty();
+        eprintln!("computing availability");
+        if self.is_rcv_closed() || !self.incoming.is_empty() {
+            a |= Available::READ;
+        }
+        // TODO: take into account self.state
+        // TODO: set Available::WRITE
+
+        a
+    }
 }
 
 /// State of Send Sequence Space (RFC 793 S3.2)
@@ -206,7 +240,7 @@ impl Connection {
         iph: etherparse::Ipv4HeaderSlice<'a>,
         tcph: etherparse::TcpHeaderSlice<'a>,
         data: &'a [u8],
-    ) -> io::Result<()> {
+    ) -> io::Result<Available> {
         // first, check that sequence numbers are valid
         let seqn = tcph.sequence_number();
         let mut slen = data.len() as u32;
@@ -217,18 +251,22 @@ impl Connection {
             slen += 1;
         }
         let wend = self.recv.nxt.wrapping_add(self.recv.wnd as u32);
-        if slen == 0 {
+        let okay = if slen == 0 {
             // zero-length segment has separate rules for acceptance
             if self.recv.wnd == 0 {
                 if seqn != self.recv.nxt {
-                    return Ok(());
+                    false
+                } else {
+                    true
                 }
             } else if !is_between_wrapped(self.recv.nxt.wrapping_sub(1), seqn, wend) {
-                return Ok(());
+                false
+            } else {
+                true
             }
         } else {
             if self.recv.wnd == 0 {
-                return Ok(());
+                false
             } else if !is_between_wrapped(self.recv.nxt.wrapping_sub(1), seqn, wend)
                 && !is_between_wrapped(
                     self.recv.nxt.wrapping_sub(1),
@@ -236,11 +274,23 @@ impl Connection {
                     wend,
                 )
             {
-                return Ok(());
+                false
+            } else {
+                true
             }
-        }
+        };
 
+        if !okay {
+            eprintln!("NOT OKAY");
+            self.write(nic, &[])?;
+            return Ok(self.availability());
+        }
         self.recv.nxt = seqn.wrapping_add(slen);
+
+        if !tcph.ack() {
+            eprintln!("NOT ACK");
+            return Ok(self.availability());
+        }
         // TODO: if _not_acceptable, send ACK
         // <SEQ=SND.NXT><ACK=RCV.NXT><CTL=ACK>
         //
@@ -270,15 +320,15 @@ impl Connection {
         }
 
         if let State::Estab | State::FinWait1 | State::FinWait2 = self.state {
-            if !is_between_wrapped(self.send.una, ackn, self.send.nxt.wrapping_add(1)) {
-                return Ok(());
+            if is_between_wrapped(self.send.una, ackn, self.send.nxt.wrapping_add(1)) {
+                self.send.una = ackn;
             }
-            self.send.una = ackn;
+
+            // TODO: accept data
+            assert!(data.is_empty());
 
             if let State::Estab = self.state {
                 // now let's terminate the connection
-                // TODO:
-                assert!(data.is_empty());
                 // TODO: needs to be stored in the retransmission queue!
                 self.tcp.fin = true;
                 self.write(nic, &[])?;
@@ -294,29 +344,17 @@ impl Connection {
         }
 
         if tcph.fin() {
+            eprintln!("IS FIN (in {:?})", self.state);
             match self.state {
                 State::FinWait2 => {
-                    // we're done with the connection!
-                    self.tcp.fin = true;
                     self.write(nic, &[])?;
-                    self.state = State::FinWait1;
+                    self.state = State::TimeWait;
                 }
-                _ => unreachable!(),
+                _ => unimplemented!(),
             }
         }
 
-        // if let State::FinWait2 = self.state {
-        //     if !tcph.fin() || !data.is_empty() {
-        //         unimplemented!();
-        //     }
-
-        //     // must have ACKed our FIN, since we detected at least one acked byte,
-        //     // and we have only sent one byte (the FIN).
-        //     self.write(nic, &[])?;
-        //     self.state = State::TimeWait;
-        // }
-
-        Ok(())
+        Ok(self.availability())
     }
 }
 
