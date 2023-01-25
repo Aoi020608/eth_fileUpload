@@ -250,11 +250,14 @@ impl Read for TcpStream {
                 )
             })?;
 
+            eprintln!("trying to read");
             if c.is_rcv_closed() && c.incoming.is_empty() {
                 // no more data to read, and no need to block, because there won't be any more
+                eprintln!("connection has gone away");
                 return Ok(0);
             }
 
+            eprintln!("connection still active");
             if !c.incoming.is_empty() {
                 let mut nread = 0;
                 let (head, tail) = c.incoming.as_slices();
