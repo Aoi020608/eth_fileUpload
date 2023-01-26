@@ -42,6 +42,7 @@ pub struct Connection {
 
     pub(crate) incoming: VecDeque<u8>,
     pub(crate) unacked: VecDeque<u8>,
+
     pub(crate) closed: bool,
     closed_at: Option<u32>,
 }
@@ -148,7 +149,7 @@ impl Connection {
         }
 
         let iss = 0;
-        let wnd = 10;
+        let wnd = 1024;
         let mut c = Connection {
             timers: Timers {
                 send_times: Default::default(),
@@ -158,18 +159,20 @@ impl Connection {
             send: SendSequenceSpace {
                 iss,
                 una: iss,
-                nxt: iss + 1,
+                nxt: iss,
                 wnd,
                 up: false,
+
                 wl1: 0,
                 wl2: 0,
             },
             recv: RecvSequenceSpace {
+                irs: tcph.sequence_number(),
                 nxt: tcph.sequence_number() + 1,
                 wnd: tcph.window_size(),
-                irs: tcph.sequence_number(),
                 up: false,
             },
+            tcp: etherparse::TcpHeader::new(tcph.destination_port(), tcph.source_port(), iss, wnd),
             ip: etherparse::Ipv4Header::new(
                 0,
                 64,
@@ -187,7 +190,6 @@ impl Connection {
                     iph.source()[3],
                 ],
             ),
-            tcp: etherparse::TcpHeader::new(tcph.destination_port(), tcph.source_port(), iss, wnd),
 
             incoming: Default::default(),
             unacked: Default::default(),
@@ -209,17 +211,16 @@ impl Connection {
         // self.tcp.sequence_number = self.send.nxt;
         self.tcp.sequence_number = seq;
         self.tcp.acknowledgment_number = self.recv.nxt;
-        // if !self.tcp.syn && 
+        // if !self.tcp.syn &&
 
         // TODO: return +1 for SYN/FIN
-        // println!(
-        //     "write(seq: {}, limit: {}) syn {:?} fin {:?}",
-        //     seq, limit, self.tcp.syn, self.tcp.fin
-        // );
+        println!(
+            "write(seq: {}, limit: {}) syn {:?} fin {:?}",
+            seq, limit, self.tcp.syn, self.tcp.fin
+        );
 
         let mut offset = seq.wrapping_sub(self.send.una) as usize;
         // we want self.unacked[nunacked..]
-        println!("FIN close {:?}", self.closed_at);
         if let Some(closed_at) = self.closed_at {
             if seq == closed_at.wrapping_add(1) {
                 // trying to write following FIN
@@ -227,12 +228,6 @@ impl Connection {
                 limit = 0;
             }
         }
-        println!(
-            "using offset {} base {} in {:?}",
-            offset,
-            self.send.una,
-            self.unacked.as_slices()
-        );
         let (mut h, mut t) = self.unacked.as_slices();
         if h.len() >= offset {
             h = &h[offset..];
@@ -249,15 +244,20 @@ impl Connection {
         self.ip.set_payload_len(size - self.ip.header_len());
 
         // the kernel is nice and does this for us
-        self.tcp.checksum = self
-            .tcp
-            .calc_checksum_ipv4(&self.ip, &[])
-            .expect("failed to compute checksum");
+        // self.tcp.checksum = self
+        //     .tcp
+        //     .calc_checksum_ipv4(&self.ip, &[])
+        //     .expect("failed to compute checksum");
 
         // write out the header
+        let buf_len = buf.len();
         let mut unwritten = &mut buf[..];
         self.ip.write(&mut unwritten);
-        self.tcp.write(&mut unwritten);
+        let ip_header_ends_at = buf_len - unwritten.len();
+
+        unwritten = &mut unwritten[self.tcp.header_len() as usize..];
+        let tcp_header_ends_at = buf_len - unwritten.len();
+
         let payload_bytes = {
             let mut written = 0;
             let mut limit = max_data;
@@ -273,7 +273,16 @@ impl Connection {
 
             written
         };
-        let unwritten = unwritten.len();
+        let payload_ends_at = buf_len - unwritten.len();
+
+        self.tcp.checksum = self
+            .tcp
+            .calc_checksum_ipv4(&self.ip, &buf[tcp_header_ends_at..payload_ends_at])
+            .expect("failed to compute checksume");
+
+        let mut tcp_header_buf = &mut buf[ip_header_ends_at..tcp_header_ends_at];
+        self.tcp.write(&mut tcp_header_buf);
+
         let mut next_seq = seq.wrapping_add(payload_bytes as u32);
         if self.tcp.syn {
             next_seq = next_seq.wrapping_add(1);
@@ -288,7 +297,7 @@ impl Connection {
         }
         self.timers.send_times.insert(seq, time::Instant::now());
 
-        nic.send(&buf[..buf.len() - unwritten])?;
+        nic.send(&buf[..payload_ends_at])?;
         Ok(payload_bytes)
     }
 
