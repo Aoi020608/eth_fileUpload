@@ -209,13 +209,13 @@ impl Connection {
         // self.tcp.sequence_number = self.send.nxt;
         self.tcp.sequence_number = seq;
         self.tcp.acknowledgment_number = self.recv.nxt;
-        if !self.tcp.syn && 
+        // if !self.tcp.syn && 
 
         // TODO: return +1 for SYN/FIN
-        println!(
-            "write(seq: {}, limit: {}) syn {:?} fin {:?}",
-            seq, limit, self.tcp.syn, self.tcp.fin
-        );
+        // println!(
+        //     "write(seq: {}, limit: {}) syn {:?} fin {:?}",
+        //     seq, limit, self.tcp.syn, self.tcp.fin
+        // );
 
         let mut offset = seq.wrapping_sub(self.send.una) as usize;
         // we want self.unacked[nunacked..]

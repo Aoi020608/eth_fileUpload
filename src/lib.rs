@@ -61,7 +61,7 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
         // we want to read from nic, but we want to make sure that we'll wake up when the next
         // timer has to be triggered!
         let mut pfd = [PollFd::new(nic.as_raw_fd(), EventFlags::POLLIN)];
-        let n = poll(&mut pfd[..], 1000).map_err(|e| e.as_errno().unwrap())?;
+        let n = poll(&mut pfd[..], 10).map_err(|e| e.as_errno().unwrap())?;
         assert_ne!(n, -1);
         if n == 0 {
             let mut cmg = ih.manager.lock().unwrap();
@@ -70,6 +70,7 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
             }
             continue;
         }
+        assert_eq!(n, 1);
         let nbytes = nic.recv(&mut buf[..])?;
 
         // TODO: if self.terminate && Arc::get_strong_refs(ih) == 1; the tear down all connections
@@ -119,7 +120,6 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
                                 // TODO: compare before/after
                                 drop(cmg);
                                 if a.contains(tcp::Available::READ) {
-                                    eprintln!("NOW AVAILABLE FOR READING");
                                     ih.rcv_var.notify_all();
                                 }
 
@@ -244,7 +244,7 @@ pub struct TcpStream {
 
 impl Drop for TcpStream {
     fn drop(&mut self) {
-        let mut _cm = self.h.manager.lock().unwrap();
+        let cm = self.h.manager.lock().unwrap();
         // TODO: send FIN on cm.connections[quad]
         // TODO: _eventually_ remove self.quad from cm.connections
         // if let Some(_c) = cm.connections.remove(&self.quad) {
@@ -279,6 +279,9 @@ impl Read for TcpStream {
                 let tread = std::cmp::min(buf.len() - nread, tail.len());
                 buf[hread..(hread + tread)].copy_from_slice(&tail[..tread]);
                 nread += tread;
+                let thread = std::cmp::min(buf.len() - nread, tail.len());
+                buf[hread..(hread + thread)].copy_from_slice(&tail[..thread]);
+                nread += thread;
                 drop(c.incoming.drain(..nread));
 
                 return Ok(nread);
@@ -318,11 +321,11 @@ impl Write for TcpStream {
         let c = cm.connections.get_mut(&self.quad).ok_or_else(|| {
             io::Error::new(
                 io::ErrorKind::ConnectionAborted,
-                "tcp was terminated unexpectedly.",
+                "stream was terminated unexpectedly.",
             )
         })?;
 
-        if !c.unacked.is_empty() {
+        if c.unacked.is_empty() {
             Ok(())
         } else {
             // TODO: block
@@ -343,8 +346,7 @@ impl TcpStream {
                 "tcp was terminated unexpectedly.",
             )
         })?;
-        
-c.close()?;
-        Ok(())
+
+        c.close()
     }
 }
