@@ -2,9 +2,12 @@ use std::{
     collections::{hash_map::Entry, HashMap, VecDeque},
     io::{self, Read, Write},
     net::{Ipv4Addr, Shutdown},
+    os::fd::AsRawFd,
     sync::{Arc, Condvar, Mutex},
     thread,
 };
+
+use nix::poll::{poll, EventFlags, PollFd};
 
 mod tcp;
 
@@ -55,7 +58,18 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
     let mut buf = [0u8; 1504];
 
     loop {
-        // TODO: set a timeout for this recv for TCP timers or ConnectionManager::timeout
+        // we want to read from nic, but we want to make sure that we'll wake up when the next
+        // timer has to be triggered!
+        let mut pfd = [PollFd::new(nic.as_raw_fd(), EventFlags::POLLIN)];
+        let n = poll(&mut pfd[..], 1000).map_err(|e| e.as_errno().unwrap())?;
+        assert_ne!(n, -1);
+        if n == 0 {
+            let mut cmg = ih.manager.lock().unwrap();
+            for connection in cmg.connections.values_mut() {
+                connection.on_tick(&mut nic)?;
+            }
+            continue;
+        }
         let nbytes = nic.recv(&mut buf[..])?;
 
         // TODO: if self.terminate && Arc::get_strong_refs(ih) == 1; the tear down all connections
@@ -147,10 +161,10 @@ fn packet_loop(mut nic: tun_tap::Iface, ih: InterfaceHandle) -> io::Result<()> {
 
 impl Interface {
     pub fn new() -> io::Result<Self> {
-        eprintln!("Hello from new function");
         let nic = tun_tap::Iface::without_packet_info("tun0", tun_tap::Mode::Tun)?;
 
         let ih: InterfaceHandle = Arc::default();
+
         let jh = {
             let ih = ih.clone();
             thread::spawn(move || packet_loop(nic, ih))
@@ -296,8 +310,6 @@ impl Write for TcpStream {
         let nwrite = std::cmp::min(buf.len(), SENDQUEUE_SIZE - c.unacked.len());
         c.unacked.extend(&mut buf[..nwrite].iter());
 
-        // TODO: wake up writer
-
         Ok(nwrite)
     }
 
@@ -324,7 +336,15 @@ impl Write for TcpStream {
 
 impl TcpStream {
     pub fn shutdown(&self, how: Shutdown) -> io::Result<()> {
-        // TODO: send FIN on cm.connections[quad]
-        unimplemented!();
+        let mut cm = self.h.manager.lock().unwrap();
+        let c = cm.connections.get_mut(&self.quad).ok_or_else(|| {
+            io::Error::new(
+                io::ErrorKind::ConnectionAborted,
+                "tcp was terminated unexpectedly.",
+            )
+        })?;
+        
+c.close()?;
+        Ok(())
     }
 }
